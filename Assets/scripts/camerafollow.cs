@@ -11,6 +11,7 @@ public class camerafollow : MonoBehaviour {
 	public static float distance = 5.0f;
 	public float x_sensitivity = 2.0f;
 	public float y_sensitivity = 2.0f;
+
 	private float x_current = 0.0f;
 	private float y_current = 0.0f;
 
@@ -25,14 +26,11 @@ public class camerafollow : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		x_current += Input.GetAxis ("Mouse X") * x_sensitivity;
-		y_current += Input.GetAxis ("Mouse Y") * y_sensitivity;
+		x_current -= Input.GetAxis ("Mouse X") * x_sensitivity;
+		y_current -= Input.GetAxis ("Mouse Y") * y_sensitivity;
 
 		y_current = Mathf.Clamp (y_current, Y_ANGLE_MIN, Y_ANGLE_MAX);
 
-	}
-
-	private void LateUpdate(){
 		//Debug.Log(offset);
 		//Vector3 direction = new Vector3 (0, 0, -distance);
 		Quaternion rotation = Quaternion.Euler (y_current, x_current, 0);
@@ -40,10 +38,11 @@ public class camerafollow : MonoBehaviour {
 		if (Camera_Raycast.raycast_distance < distance) {
 			Debug.Log (Camera_Raycast.raycast_distance);
 		}// else {
-			transform.position = target.position + rotation * offset;
+		transform.position = target.position + rotation * offset;
 		//}
 		//Debug.Log (Camera_Raycast.raycast_distance);
 		transform.LookAt (target.position);
 
 	}
 }
+
