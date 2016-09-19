@@ -4,7 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - light attack
+  - Camera Rig
   layers:
   - Default
   - TransparentFX
