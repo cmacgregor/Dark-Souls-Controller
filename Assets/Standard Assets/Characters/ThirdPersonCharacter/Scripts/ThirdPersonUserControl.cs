@@ -10,9 +10,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
         private Transform m_Cam;                  // A reference to the main camera in the scenes transform
         private Vector3 m_CamForward;             // The current forward direction of the camera
-        private Vector3 m_Move;
-        private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
-
+		private Vector3 m_Move;					  // the world-relative desired move direction, calculated from the camForward and user input.
+        private bool m_Roll;                      
         
         private void Start()
         {
@@ -35,10 +34,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void Update()
         {
+			/*
             if (!m_Jump)
             {
-                m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
+            	m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
             }
+            */
         }
 
 
@@ -49,6 +50,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             float h = CrossPlatformInputManager.GetAxis("Horizontal");
             float v = CrossPlatformInputManager.GetAxis("Vertical");
             bool crouch = Input.GetKey(KeyCode.C);
+
+			//Roll if space is pressed 
+			m_Roll = Input.GetKey (KeyCode.Space);
 
             // calculate move direction to pass to character
             if (m_Cam != null)
@@ -68,8 +72,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 #endif
 
             // pass all parameters to the character control script
-            m_Character.Move(m_Move, crouch, m_Jump);
-            m_Jump = false;
+            m_Character.Move(m_Move, crouch, m_Roll);
+            m_Roll= false;
         }
     }
 }
