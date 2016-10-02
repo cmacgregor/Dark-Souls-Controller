@@ -12,7 +12,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private Vector3 m_CamForward;             // The current forward direction of the camera
 		private Vector3 m_Move;					  // the world-relative desired move direction, calculated from the camForward and user input.
         private bool m_Roll;                      
-        
+		private int m_Attack = 0;        
         private void Start()
         {
             // get the transform of the main camera
@@ -34,6 +34,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void Update()
         {
+			//probably get roll here maybe?
+		
 			/*
             if (!m_Jump)
             {
@@ -66,14 +68,16 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 // we use world-relative directions in the case of no main camera
                 m_Move = v*Vector3.forward + h*Vector3.right;
             }
-#if !MOBILE_INPUT
-			// walk speed multiplier
-	        if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
-#endif
+			if (m_Attack > 0) {
+				m_Character.Attack ();
+			} else {
+				// walk speed multiplier
+				if (Input.GetKey (KeyCode.LeftShift))
+					m_Move *= 0.5f;
+				// pass all parameters to the character control script
+				m_Character.Move (m_Move, crouch, m_Roll);
 
-            // pass all parameters to the character control script
-            m_Character.Move(m_Move, crouch, m_Roll);
-            m_Roll= false;
+			}
         }
     }
 }

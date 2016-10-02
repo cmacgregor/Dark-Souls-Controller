@@ -211,14 +211,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce7a80d520cacc042b5fe14f373d8173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MovingTurnSpeed: 420
-  m_StationaryTurnSpeed: 420
+  m_MovingTurnSpeed: 360
+  m_StationaryTurnSpeed: 180
   m_JumpPower: 12
   m_GravityMultiplier: 2
   m_RunCycleLegOffset: 0.2
   m_MoveSpeedMultiplier: 1
   m_AnimSpeedMultiplier: 1
-  m_GroundCheckDistance: 0.3
+  m_GroundCheckDistance: 0.1
 --- !u!136 &545031522
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -450,7 +450,7 @@ MonoBehaviour:
   visualiseInEditor: 0
   closestDistance: 0.5
   dontClipTag: Player
-  m_Pivot: {fileID: 173559106}
+  m_Pivot: {fileID: 333204661}
 --- !u!114 &949214001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -462,8 +462,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29777d3db8469f04690f3a8821c2ee06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 173559106}
-  distance: 3
+  target: {fileID: 333204661}
+  distance: 5
   x_sensitivity: 2
   y_sensitivity: 2
 --- !u!54 &949214002
