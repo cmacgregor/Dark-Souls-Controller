@@ -13,7 +13,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		private Vector3 m_Move;					  // the world-relative desired move direction, calculated from the camForward and user input.
         private bool m_Roll;                      
 		private int m_Attack = 0;        
-        private void Start()
+		private bool m_Sprint;
+
+		private void Start()
         {
             // get the transform of the main camera
             if (Camera.main != null)
@@ -27,7 +29,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 // we use self-relative controls in this case, which probably isn't what the user wants, but hey, we warned them!
             }
 
-            // get the third person character ( this should never be null due to require component )
+            //get the the character
             m_Character = GetComponent<ThirdPersonCharacter>();
         }
 
@@ -56,6 +58,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			//Roll if space is pressed 
 			m_Roll = Input.GetKey (KeyCode.Space);
 
+			//check for attack 
+			if (Input.GetMouseButton(0)){
+				m_Attack += 1;
+			}
+
             // calculate move direction to pass to character
             if (m_Cam != null)
             {
@@ -69,13 +76,15 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 m_Move = v*Vector3.forward + h*Vector3.right;
             }
 			if (m_Attack > 0) {
-				m_Character.Attack ();
+				m_Character.Attack (m_Attack);
 			} else {
-				// walk speed multiplier
-				if (Input.GetKey (KeyCode.LeftShift))
-					m_Move *= 0.5f;
+				//Sprint toggle
+				if (Input.GetKey (KeyCode.LeftShift)) {
+					m_Sprint = true;
+				}
 				// pass all parameters to the character control script
-				m_Character.Move (m_Move, crouch, m_Roll);
+				m_Character.Move (m_Move, crouch, m_Roll, m_Sprint);
+
 
 			}
         }

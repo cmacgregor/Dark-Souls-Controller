@@ -29,6 +29,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		CapsuleCollider m_Capsule;
 		bool m_Crouching;
 		bool m_Roll; 
+		bool m_Sprint; 
 
 		void Start()
 		{
@@ -42,12 +43,29 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_OrigGroundCheckDistance = m_GroundCheckDistance;
 		}
 
-		public void Attack()
+		public void Attack(int attack_seq)
 		{
+			Debug.Log ("Attacking: " + attack_seq);
+			//turn off motion layer
+			m_Animator.SetLayerWeight (0, 0);
+			//turn on combat layer
+			m_Animator.SetLayerWeight (2, 1);
+
+			//only three attacks atm. 
+			if (attack_seq > 3) {
+				attack_seq = 0;
+			}
+
+			m_Animator.SetInteger("Attack", attack_seq);
+		
+			//turn on motion layer
+			m_Animator.SetLayerWeight (0, 1);
+			//turn on combat layer
+			m_Animator.SetLayerWeight (2, 0);
 
 		}
 
-		public void Move(Vector3 move, bool crouch, bool roll)
+		public void Move(Vector3 move, bool crouch, bool roll, bool sprint)
 		{
 
 			// convert the world relative moveInput vector into a local-relative
@@ -60,6 +78,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_TurnAmount = Mathf.Atan2(move.x, move.z);
 			m_ForwardAmount = move.z;
 			m_Roll = roll; 
+			m_Sprint = sprint;
 
 			ApplyExtraTurnRotation();
 
@@ -125,6 +144,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_Animator.SetBool("Crouch", m_Crouching);
 			m_Animator.SetBool("OnGround", m_IsGrounded);
 			m_Animator.SetBool ("Roll", m_Roll);
+			m_Animator.SetBool ("Sprint", m_Sprint);
+
+
 			if (!m_IsGrounded)
 			{
 				m_Animator.SetFloat("Jump", m_Rigidbody.velocity.y);
