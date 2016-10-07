@@ -43,20 +43,15 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_OrigGroundCheckDistance = m_GroundCheckDistance;
 		}
 
-		public void Attack(int attack_seq)
+		public void Attack(bool attack)
 		{
-			Debug.Log ("Attacking: " + attack_seq);
+			Debug.Log ("Attacking: " + attack);
 			//turn off motion layer
 			m_Animator.SetLayerWeight (0, 0);
 			//turn on combat layer
 			m_Animator.SetLayerWeight (2, 1);
 
-			//only three attacks atm. 
-			if (attack_seq > 3) {
-				attack_seq = 0;
-			}
-
-			m_Animator.SetInteger("Attack", attack_seq);
+			m_Animator.SetBool("Attack", attack);
 		
 			//turn on motion layer
 			m_Animator.SetLayerWeight (0, 1);
@@ -146,13 +141,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_Animator.SetBool ("Roll", m_Roll);
 			m_Animator.SetBool ("Sprint", m_Sprint);
 
-
+			/*
 			if (!m_IsGrounded)
 			{
 				m_Animator.SetFloat("Jump", m_Rigidbody.velocity.y);
 			}
 
-			/*
 			// calculate which leg is behind, so as to leave that leg trailing in the jump animation
 			// (This code is reliant on the specific run cycle offset in our animations,
 			// and assumes one leg passes the other at the normalized clip times of 0.0 and 0.5)

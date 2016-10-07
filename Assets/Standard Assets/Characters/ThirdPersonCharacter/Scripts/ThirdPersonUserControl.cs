@@ -12,7 +12,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private Vector3 m_CamForward;             // The current forward direction of the camera
 		private Vector3 m_Move;					  // the world-relative desired move direction, calculated from the camForward and user input.
         private bool m_Roll;                      
-		private int m_Attack = 0;        
+		private bool m_Attack;        
 		private bool m_Sprint;
 
 		private void Start()
@@ -59,9 +59,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_Roll = Input.GetKey (KeyCode.Space);
 
 			//check for attack 
-			if (Input.GetMouseButton(0)){
-				m_Attack += 1;
-			}
+			m_Attack = Input.GetMouseButton(0);
 
             // calculate move direction to pass to character
             if (m_Cam != null)
@@ -75,7 +73,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 // we use world-relative directions in the case of no main camera
                 m_Move = v*Vector3.forward + h*Vector3.right;
             }
-			if (m_Attack > 0) {
+
+			if (m_Attack) {
 				m_Character.Attack (m_Attack);
 			} else {
 				//Sprint toggle
