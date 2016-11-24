@@ -81,14 +81,15 @@ public class player_input_controller : MonoBehaviour
 
         if (input_menu)
         {
-
+			Debug.Log("input_menu");
         }
         else if (input_gestureMenu)
         {
-
+			Debug.Log("input_gestureMenu");
         }
         else if (input_toggleView)
         {
+			Debug.Log("input_toggleView");
             /*
             //enemy is in line of site
             if (player_character.isInFOV("Enemy"))
