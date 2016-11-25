@@ -3,20 +3,22 @@ using System.Collections;
 
 public class player_input_controller : MonoBehaviour
 {
-    //input variables 
+	//debug variable
+//	static bool DEBUG = true;
+	static bool DEBUG = false;
+	#region input variables 
     //movement inputs
     float input_h;          //horizontal directional
     float input_v;          //vertical directional
     bool input_dodge;       //dodge 
     bool input_sprint;      //sprint 
     bool input_intearct;    //interact
-                            //combat inputs		
+	//combat inputs		
     bool input_lla;         //left handed light attack
     bool input_lha;         //left handed heavy attack
     bool input_rla;         //right handed light attack
     bool input_rha;         //right handed heavy attack
     bool input_tth;          //toggle hands on weapon
-
     //held item management inputs
     bool input_use;         //use selected item
     bool input_left;        //direction pad left
@@ -27,26 +29,30 @@ public class player_input_controller : MonoBehaviour
     bool input_gestureMenu; //open gestures menu
     bool input_menu;        //open main menu
     bool input_toggleView;  //reset camera
-
+	#endregion
     //Weapon Toggle variables
     int button_held_time;
-    enum stance : int
+    enum stance
     {
-        SingleHanded,
-        RightHanded,
-        LeftHanded
+        SingleHand = 0,
+        RightHand = 1,
+        LeftHand = 2
     };
 
     //Character controller 
-    //CharacterController player_character;
+    CharacterController player_character;
+	//Main Camera's transform
+	Transform camera_main;
     //<type>	targeted_enemy; 
-    // Use this for initialization
+    
+	// Use this for initialization
     void Start()
     {
         //grab main camera
-
+		camera_main = Camera.main.transform;
         //set character controller
-
+		player_character = GetComponent<CharacterController>();
+		//set initial button held time
         button_held_time = 0;
     }
 
@@ -62,7 +68,7 @@ public class player_input_controller : MonoBehaviour
         input_h = Input.GetAxis("Horizontal");
         input_v = Input.GetAxis("Vertical");
         input_dodge = Input.GetButtonDown("Dodge");
-        input_sprint = Input.GetButtonDown("Sprint");
+        input_sprint = Input.GetButton("Sprint");
         input_intearct = Input.GetButtonDown("Interact");
         input_lla = Input.GetButtonDown("Left Hand Light Attack");
         input_lha = Input.GetButtonDown("Left Hand Heavy Attack");
@@ -81,15 +87,15 @@ public class player_input_controller : MonoBehaviour
 
         if (input_menu)
         {
-			Debug.Log("input_menu");
+			if(DEBUG) Debug.Log("input_menu");
         }
         else if (input_gestureMenu)
         {
-			Debug.Log("input_gestureMenu");
+			if(DEBUG) Debug.Log("input_gestureMenu");
         }
         else if (input_toggleView)
         {
-			Debug.Log("input_toggleView");
+			if(DEBUG) Debug.Log("input_toggleView");
             /*
             //enemy is in line of site
             if (player_character.isInFOV("Enemy"))
@@ -109,23 +115,32 @@ public class player_input_controller : MonoBehaviour
             // -Heavy action right 
             if (input_rla)
             {
-                Debug.Log("input_rla");
+				if(DEBUG) Debug.Log("input_rla");
+				player_character.attack ("Right Handed Light Attack");
             }
             // -Heavy action left
             if (input_rha)
             {
-                Debug.Log("input_rha");
+				if(DEBUG) Debug.Log("input_rha");
+				player_character.attack ("Right Handed Heavy Attack");
             }
             // -Light action right 
             if (input_lla)
             {
-                Debug.Log("input_lla");
+				if(DEBUG) Debug.Log("input_lla");
+				player_character.attack ("Light Handed Light Attack");
             }
             // -Light action left 
             if (input_lha)
             {
-                Debug.Log("input_lha");
+				if(DEBUG) Debug.Log("input_lha");
+				player_character.attack ("Left Handed Heavy Attack");
             }
+			// -Kicking attack
+//			if (input_rla && (input_h > 0f || input_h > 0f)) 
+//			{
+//				if (DEBUG) Debug.Log ("input_rla + movement");
+//			}
             #region handle two handed stance changes 
             //check if weapon toggle button has been pressed
             if (Input.GetButton("Two-handed Toggle"))
@@ -135,24 +150,27 @@ public class player_input_controller : MonoBehaviour
             //if weapon toggle button has been released
             if (input_tth)
             {
-                Debug.Log("input_tth");
-                Debug.Log("button_held_time: " + button_held_time);
-                if (0 == 0)
+				if(DEBUG) Debug.Log("input_tth");
+				if(DEBUG) Debug.Log("button_held_time: " + button_held_time);
+				if (player_character.Weapon_stance == (int)stance.SingleHand)
                 {
                     //if held down breifly two hand left hand 
                     if (button_held_time > 60)
                     {
-                        Debug.Log("stance = LeftHanded");
+						if(DEBUG) Debug.Log("stance = LeftHanded");
+						player_character.Weapon_stance = (int)stance.LeftHand;
                     }
                     //else two hand right hand wpeaon
                     else
                     {
-                        Debug.Log("stance = RightHanded");
+						if(DEBUG) Debug.Log("stance = RightHanded");
+						player_character.Weapon_stance = (int)stance.RightHand;
                     }
                 }
                 else
                 {
-                    Debug.Log("stance = SingleHanded");
+					if(DEBUG) Debug.Log("stance = SingleHanded");
+					player_character.Weapon_stance = (int)stance.SingleHand;
                 }
                 button_held_time = 0;
             }
@@ -160,15 +178,14 @@ public class player_input_controller : MonoBehaviour
             // -Dodge
             if (input_dodge)
             {
-                Debug.Log("input_dodge");
-                // -sprint dodge with ending roll
-                // -regular roll 	
+				if(DEBUG) Debug.Log("input_dodge");
+				player_character.dodge();	
             }
             #region Handle movement
             if (input_h > 0 || input_v > 0)
             {
-                Debug.Log("input_h");
-                Debug.Log("input_v");
+				if(DEBUG) Debug.Log("input_h");
+				if(DEBUG) Debug.Log("input_v");
                 //if locked on
                 /*
                 if (targeted_enemy != null)
@@ -178,19 +195,29 @@ public class player_input_controller : MonoBehaviour
                 }
                 */
                 // -sprint
-                if (input_sprint)
+                if (input_sprint) //and player stamina
                 { //and !player_character.isSprinting()) {
-                    Debug.Log("input_sprint");
-                    //player_character.toggleSprint();
+					if(DEBUG) Debug.Log("input_sprint");
+					player_character.Sprinting = true;
                 }
+				else 
+				{
+					player_character.Sprinting = false;
+				}
                 // -regular motion
             }
             #endregion
             // -Interact 
             if (input_intearct)
             {
-                Debug.Log("input_interact");
+				if(DEBUG) Debug.Log("input_interact");
             }
+			// -Use Item
+			if (input_use) 
+			{
+				if (DEBUG) Debug.Log ("input_use");
+				player_character.use_item();
+			}
         }
     }
 }
