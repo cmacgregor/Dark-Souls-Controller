@@ -30,30 +30,36 @@ public class player_input_controller : MonoBehaviour
     bool input_menu;        //open main menu
     bool input_toggleView;  //reset camera
 	#endregion
+
+	//heavy attack variables 
+	int left_heavy_button_held_time;
+	int right_heavy_button_held_time;
     //Weapon Toggle variables
-    int button_held_time;
+    int stance_toggle_held_time;
     enum stance
     {
         SingleHand = 0,
         RightHand = 1,
         LeftHand = 2
     };
-
+			
     //Character controller 
     CharacterController player_character;
-	//Main Camera's transform
-	Transform camera_main;
-    //<type>	targeted_enemy; 
+	//Movement calculation variables 
+	Transform main_CameraTransform;
+	Vector3 main_CameraForward; 
+	Vector3 movement_Vector;
+	//<type>	targeted_enemy; 
     
 	// Use this for initialization
     void Start()
     {
         //grab main camera
-		camera_main = Camera.main.transform;
+		main_CameraTransform = Camera.main.transform;
         //set character controller
 		player_character = GetComponent<CharacterController>();
 		//set initial button held time
-        button_held_time = 0;
+		stance_toggle_held_time = 0;
     }
 
     // Update is called once per frame
@@ -71,9 +77,9 @@ public class player_input_controller : MonoBehaviour
         input_sprint = Input.GetButton("Sprint");
         input_intearct = Input.GetButtonDown("Interact");
         input_lla = Input.GetButtonDown("Left Hand Light Attack");
-        input_lha = Input.GetButtonDown("Left Hand Heavy Attack");
+        input_lha = Input.GetButtonUp("Left Hand Heavy Attack");
         input_rla = Input.GetButtonDown("Right Hand Light Attack");
-        input_rha = Input.GetButtonDown("Right Hand Heavy Attack");
+        input_rha = Input.GetButtonUp("Right Hand Heavy Attack");
         input_tth = Input.GetButtonUp("Two-handed Toggle");
         input_use = Input.GetButtonUp("Use Item");
 //        input_left = Input.GetButtonDown("");
@@ -112,29 +118,36 @@ public class player_input_controller : MonoBehaviour
         }
         else
         {
-            // -Heavy action right 
+			//heavy attack hold buttons
+			if (Input.GetButton ("Left Hand Heavy Attack")) {
+				left_heavy_button_held_time++;
+			}
+			if (Input.GetButton ("Right Hand Heavy Attack")) {
+				right_heavy_button_held_time++;
+			}
+            // -Light action Right 
             if (input_rla)
             {
 				if(DEBUG) Debug.Log("input_rla");
-				player_character.attack ("Right Handed Light Attack");
+				player_character.attack (0);
             }
-            // -Heavy action left
+			// -Light action Left
+			if (input_lla)
+			{
+				if(DEBUG) Debug.Log("input_lla");
+				player_character.attack (1);
+			}
+            // -Heavy action Right
             if (input_rha)
             {
 				if(DEBUG) Debug.Log("input_rha");
-				player_character.attack ("Right Handed Heavy Attack");
+				player_character.attack (2);
             }
-            // -Light action right 
-            if (input_lla)
-            {
-				if(DEBUG) Debug.Log("input_lla");
-				player_character.attack ("Light Handed Light Attack");
-            }
-            // -Light action left 
+            // -Heavy action Left 
             if (input_lha)
             {
 				if(DEBUG) Debug.Log("input_lha");
-				player_character.attack ("Left Handed Heavy Attack");
+				player_character.attack (2);
             }
 			// -Kicking attack
 //			if (input_rla && (input_h > 0f || input_h > 0f)) 
@@ -145,17 +158,17 @@ public class player_input_controller : MonoBehaviour
             //check if weapon toggle button has been pressed
             if (Input.GetButton("Two-handed Toggle"))
             {
-                button_held_time++;
+                stance_toggle_held_time++;
             }
             //if weapon toggle button has been released
             if (input_tth)
             {
 				if(DEBUG) Debug.Log("input_tth");
-				if(DEBUG) Debug.Log("button_held_time: " + button_held_time);
+				if(DEBUG) Debug.Log("button_held_time: " + stance_toggle_held_time);
 				if (player_character.Weapon_stance == (int)stance.SingleHand)
                 {
                     //if held down breifly two hand left hand 
-                    if (button_held_time > 60)
+                    if (stance_toggle_held_time > 60)
                     {
 						if(DEBUG) Debug.Log("stance = LeftHanded");
 						player_character.Weapon_stance = (int)stance.LeftHand;
@@ -172,11 +185,11 @@ public class player_input_controller : MonoBehaviour
 					if(DEBUG) Debug.Log("stance = SingleHanded");
 					player_character.Weapon_stance = (int)stance.SingleHand;
                 }
-                button_held_time = 0;
+                stance_toggle_held_time = 0;
             }
             #endregion
             // -Dodge
-            if (input_dodge)
+            if (input_dodge) //and player stamina 
             {
 				if(DEBUG) Debug.Log("input_dodge");
 				player_character.dodge();	
@@ -186,31 +199,38 @@ public class player_input_controller : MonoBehaviour
             {
 				if(DEBUG) Debug.Log("input_h");
 				if(DEBUG) Debug.Log("input_v");
-                //if locked on
-                /*
-                if (targeted_enemy != null)
-                {
-                    //alter movement calculations to be target-centric
-                    Debug.Log("targeting enemy");
-                }
-                */
                 // -sprint
                 if (input_sprint) //and player stamina
                 { //and !player_character.isSprinting()) {
 					if(DEBUG) Debug.Log("input_sprint");
 					player_character.Sprinting = true;
                 }
+				// -regular motion
 				else 
 				{
 					player_character.Sprinting = false;
 				}
-                // -regular motion
+				//create movement vector based off of camera and movement input
+				// calculate move direction to pass to character
+//				if (main_CameraTransform != null)
+//				{
+					// calculate camera relative direction to move:
+					main_CameraForward = Vector3.Scale(main_CameraTransform.forward, new Vector3(1, 0, 1)).normalized;
+					movement_Vector = input_v*main_CameraForward + input_h*main_CameraTransform.right;
+//				}
+//				else
+//				{
+//					// we use world-relative directions in the case of no main camera
+//					movement_Vector = input_v*Vector3.forward + input_h*Vector3.right;
+//				}
+				player_character.Move(movement_Vector);
             }
             #endregion
             // -Interact 
             if (input_intearct)
             {
 				if(DEBUG) Debug.Log("input_interact");
+				player_character.interact();
             }
 			// -Use Item
 			if (input_use) 

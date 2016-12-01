@@ -10,6 +10,8 @@ public class CharacterController : MonoBehaviour {
 
 	private int weapon_stance;
 	private bool sprinting;
+	private bool targeting_enemy;
+	private bool isGrounded;
 
 	Rigidbody c_Rigibody;
 	Animator c_Animator; 
@@ -21,43 +23,77 @@ public class CharacterController : MonoBehaviour {
 
 		c_Rigibody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 		sprinting = false;
+		isGrounded = checkIfGrounded();
 	}
 
 	public void Move(Vector3 move)
 	{
-		if (move.magnitude > 1f)
-			move.Normalize ();
-		move = transform.InverseTransformDirection (move);
-		float turnAmount = Mathf.Atan2 (move.x, move.z); 
-		float forwardAmount = move.z;
+		if (DEBUG) Debug.Log ("CharacterController.move vector3: " + move);
 
-		float turnSpeed = Mathf.Lerp (360, 360, forwardAmount);
-		transform.Rotate (0, turnAmount * turnSpeed * Time.deltaTime, 0); 
+		if (isGrounded) {
+			if(DEBUG) Debug.Log("CharacterController is grounded");
+			if (sprinting) {
 
-		c_Animator.SetFloat ("Forward", forwardAmount, 0.1f, Time.deltaTime);
-		//c_Animator.applyRootMotion = true;
+			} else if (targeting_enemy) {
 
-		Vector3 movementVector = (c_Animator.deltaPosition * movementSpeed) / Time.deltaTime;
+			} else {
+				if (move.magnitude > 1f)
+					move.Normalize ();
+				move = transform.InverseTransformDirection (move);
+				float turnAmount = Mathf.Atan2 (move.x, move.z); 
+				float forwardAmount = move.z;
 
-		movementVector.y = c_Rigibody.velocity.y;
-		c_Rigibody.velocity = movementVector;
+				float turnSpeed = Mathf.Lerp (360, 360, forwardAmount);
+				transform.Rotate (0, turnAmount * turnSpeed * Time.deltaTime, 0); 
+
+				c_Animator.SetFloat ("Forward", forwardAmount, 0.1f, Time.deltaTime);
+				//c_Animator.applyRootMotion = true;
+
+				Vector3 movementVector = (c_Animator.deltaPosition * movementSpeed) / Time.deltaTime;
+
+				movementVector.y = c_Rigibody.velocity.y;
+				c_Rigibody.velocity = movementVector;
+			}
+		}
+		else {
+			//play falling animation
+		}
 	}
-
-	public void attack(string attack_type)
+		
+	public void attack(int attack_type)
 	{
-		if(DEBUG) Debug.Log ("player_character.attack = " + attack_type);
+		//0 = Right Handed Light action
+		//1 = Left Handed Light Action
+		//2 = Right Handed Heavy Action
+		//3 = Left Handed Heavy Action
+		//4 = Kick
+		if (attack_type == 0) {
+			if (DEBUG) Debug.Log ("CharacterController.attack = right handed light action");
+		}
+		else if (attack_type == 1) {
+			if (DEBUG) Debug.Log ("CharacterController.attack = left handed light action");
+		}
+		else if (attack_type == 2) {
+			if (DEBUG) Debug.Log ("CharacterController.attack = right handed heavy action");
+		}
+		else if (attack_type == 3) {
+			if (DEBUG) Debug.Log ("CharacterController.attack = left handed heavy action");
+		}
+		else if (attack_type == 5) {
+			if (DEBUG) Debug.Log ("CharacterController.attack = kick");
+		}
 	}
 
 	public void dodge()
 	{
-		if(DEBUG) Debug.Log ("player_character.dodge");
+		if(DEBUG) Debug.Log ("CharacterController.dodge");
 		//if stamina allows 
 		if(true)
 		{
 			// -sprint dodge
 			if (sprinting) 
 			{
-				if(DEBUG) Debug.Log ("player_character.dodge: sprinting Dodge");
+				if(DEBUG) Debug.Log ("CharacterController.dodge: sprinting Dodge");
 				//if directional input is being given roll 
 
 				//else just land
@@ -70,9 +106,21 @@ public class CharacterController : MonoBehaviour {
 			}
 		}
 	}
+
 	public void use_item()
 	{
-		if(DEBUG) Debug.Log ("player_character.use_item");
+		if(DEBUG) Debug.Log ("CharacterController.use_item");
+	}
+
+	public void interact()
+	{
+		if(DEBUG) Debug.Log ("CharacterController.interact");
+	}
+
+	public bool checkIfGrounded()
+	{
+		//raycast to check if characer is grounded 
+		return true;
 	}
 
 	#region property getters and setters
@@ -93,6 +141,15 @@ public class CharacterController : MonoBehaviour {
 		}
 		set {
 			sprinting = value;
+		}
+	}
+		
+	public bool Targeting_enemy {
+		get {
+			return targeting_enemy;
+		}
+		set {
+			targeting_enemy = value;
 		}
 	}
 	#endregion
