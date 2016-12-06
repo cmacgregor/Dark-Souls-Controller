@@ -13,17 +13,20 @@ public class CharacterController : MonoBehaviour {
 	private bool targeting_enemy;
 	private bool isGrounded;
 
-	Rigidbody c_Rigibody;
-	Animator c_Animator; 
+	Rigidbody character_Rigibody;
+	Animator character_Animator; 
+	//Animator leftSide_Animator;
+	//Animator rightSide_Animator;
 
 	void Start () {
 		//Setup components 
-		c_Rigibody = GetComponent<Rigidbody>();
-		c_Animator = GetComponent<Animator>();
+		character_Rigibody = GetComponent<Rigidbody>();
+		character_Animator = GetComponent<Animator>();
 
-		c_Rigibody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+		character_Rigibody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 		sprinting = false;
 		isGrounded = checkIfGrounded();
+
 	}
 
 	public void Move(Vector3 move)
@@ -46,13 +49,13 @@ public class CharacterController : MonoBehaviour {
 				float turnSpeed = Mathf.Lerp (360, 360, forwardAmount);
 				transform.Rotate (0, turnAmount * turnSpeed * Time.deltaTime, 0); 
 
-				c_Animator.SetFloat ("Forward", forwardAmount, 0.1f, Time.deltaTime);
+				character_Animator.SetFloat ("Forward", forwardAmount, 0.1f, Time.deltaTime);
 				//c_Animator.applyRootMotion = true;
 
-				Vector3 movementVector = (c_Animator.deltaPosition * movementSpeed) / Time.deltaTime;
+				Vector3 movementVector = (character_Animator.deltaPosition * movementSpeed) / Time.deltaTime;
 
-				movementVector.y = c_Rigibody.velocity.y;
-				c_Rigibody.velocity = movementVector;
+				movementVector.y = character_Rigibody.velocity.y;
+				character_Rigibody.velocity = movementVector;
 			}
 		}
 		else {
@@ -72,6 +75,8 @@ public class CharacterController : MonoBehaviour {
 		}
 		else if (attack_type == 1) {
 			if (DEBUG) Debug.Log ("CharacterController.attack = left handed light action");
+			character_Animator.SetLayerWeight(1, 1.0f);
+			character_Animator.SetTrigger ("LightAction");
 		}
 		else if (attack_type == 2) {
 			if (DEBUG) Debug.Log ("CharacterController.attack = right handed heavy action");
