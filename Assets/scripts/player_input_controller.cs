@@ -8,8 +8,8 @@ public class player_input_controller : MonoBehaviour
 	static bool DEBUG = false;
 	#region input variables 
     //movement inputs
-    float input_h;          //horizontal directional
-    float input_v;          //vertical directional
+    float input_XMove;          //horizontal directional
+    float input_YMove;          //vertical directional
     bool input_dodge;       //dodge 
     bool input_sprint;      //sprint 
     bool input_intearct;    //interact
@@ -71,8 +71,8 @@ public class player_input_controller : MonoBehaviour
     void FixedUpdate()
     {
         #region parse this frames input
-        input_h = Input.GetAxis("Horizontal");
-        input_v = Input.GetAxis("Vertical");
+		input_XMove = Input.GetAxis("Horizontal");
+		input_YMove = Input.GetAxis("Vertical");
         input_dodge = Input.GetButtonDown("Dodge");
         input_sprint = Input.GetButton("Sprint");
         input_intearct = Input.GetButtonDown("Interact");
@@ -195,7 +195,7 @@ public class player_input_controller : MonoBehaviour
 				player_character.dodge();	
             }
             #region Handle movement
-            if (input_h > 0 || input_v > 0)
+            if (input_XMove > 0 || input_YMove > 0)
             {
 				if(DEBUG) Debug.Log("input_h");
 				if(DEBUG) Debug.Log("input_v");
@@ -216,7 +216,8 @@ public class player_input_controller : MonoBehaviour
 //				{
 					// calculate camera relative direction to move:
 					main_CameraForward = Vector3.Scale(main_CameraTransform.forward, new Vector3(1, 0, 1)).normalized;
-					movement_Vector = input_v*main_CameraForward + input_h*main_CameraTransform.right;
+					movement_Vector = input_YMove*main_CameraForward + input_XMove*main_CameraTransform.right;
+					Debug.Log(main_CameraTransform.right);
 //				}
 //				else
 //				{

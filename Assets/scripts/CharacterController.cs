@@ -4,9 +4,11 @@ using System.Collections;
 public class CharacterController : MonoBehaviour {
 
 	//debug variable
-	static bool DEBUG = true;
+//	static bool DEBUG = true;
+	static bool DEBUG = false;
 
 	public float movementSpeed = 1f;
+	public float turnSpeed = 1000;
 
 	private int weapon_stance;
 	private bool sprinting;
@@ -31,7 +33,7 @@ public class CharacterController : MonoBehaviour {
 
 	public void Move(Vector3 move)
 	{
-		//if (DEBUG) Debug.Log ("CharacterController.move vector3: " + move);
+		if (DEBUG) Debug.Log ("CharacterController.move vector3: " + move);
 
 		if (isGrounded) {
 			//if(DEBUG) Debug.Log("CharacterController is grounded");
@@ -40,22 +42,19 @@ public class CharacterController : MonoBehaviour {
 			} else if (targeting_enemy) {
 
 			} else {
-				if (move.magnitude > 1f)
-					move.Normalize ();
+				if (move.magnitude > 1f) move.Normalize ();
 				move = transform.InverseTransformDirection (move);
 				float turnAmount = Mathf.Atan2 (move.x, move.z); 
 				float forwardAmount = move.z;
 
-				float turnSpeed = Mathf.Lerp (360, 360, forwardAmount);
-				transform.Rotate (0, turnAmount * turnSpeed * Time.deltaTime, 0); 
+				transform.Rotate (0.1f, turnAmount * turnSpeed * Time.deltaTime, 0); 
 
 				character_Animator.SetFloat ("Forward", forwardAmount, 0.1f, Time.deltaTime);
-				//c_Animator.applyRootMotion = true;
+				//character_Animator.applyRootMotion = true;
 
-				Vector3 movementVector = (character_Animator.deltaPosition * movementSpeed) / Time.deltaTime;
-
-				movementVector.y = character_Rigibody.velocity.y;
-				character_Rigibody.velocity = movementVector;
+				//Vector3 movementVector = (character_Animator.deltaPosition * movementSpeed) / Time.deltaTime;
+				//movementVector.y = character_Rigibody.velocity.y;
+				//character_Rigibody.velocity = movementVector;
 			}
 		}
 		else {
