@@ -651,8 +651,8 @@ ModelImporter:
     - serializedVersion: 16
       name: HumanoidRun
       takeName: _24_a_U1_M_P_RunForward_NtrlFaceFwd__Fb_p0_No_0_PJ_10
-      firstFrame: 335.9
-      lastFrame: 353.7
+      firstFrame: 88
+      lastFrame: 575
       wrapMode: 0
       orientationOffsetY: -1.2
       level: 0
@@ -661,12 +661,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 1
       loopBlend: 1
-      loopBlendOrientation: 1
+      loopBlendOrientation: 0
       loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 1
       keepOriginalPositionY: 0
-      keepOriginalPositionXZ: 0
+      keepOriginalPositionXZ: 1
       heightFromFeet: 1
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000

@@ -4,8 +4,8 @@ using System.Collections;
 public class player_input_controller : MonoBehaviour
 {
 	//debug variable
-//	static bool DEBUG = true;
-	static bool DEBUG = false;
+	static bool DEBUG = true;
+//	static bool DEBUG = false;
 	#region input variables 
     //movement inputs
     float input_XMove;          //horizontal directional
@@ -71,17 +71,20 @@ public class player_input_controller : MonoBehaviour
     void FixedUpdate()
     {
         #region parse this frames input
+		//Movement Inputs
 		input_XMove = Input.GetAxis("Horizontal");
 		input_YMove = Input.GetAxis("Vertical");
-        input_dodge = Input.GetButtonDown("Dodge");
-        input_sprint = Input.GetButton("Sprint");
-        input_intearct = Input.GetButtonDown("Interact");
+		input_sprint = Input.GetButton("Sprint");
+		input_dodge = Input.GetButtonDown("Dodge");
+		//Attack Inputs
         input_lla = Input.GetButtonDown("Left Hand Light Attack");
         input_lha = Input.GetButtonUp("Left Hand Heavy Attack");
         input_rla = Input.GetButtonDown("Right Hand Light Attack");
         input_rha = Input.GetButtonUp("Right Hand Heavy Attack");
         input_tth = Input.GetButtonUp("Two-handed Toggle");
-        input_use = Input.GetButtonUp("Use Item");
+		//Interaction Inupts
+		input_intearct = Input.GetButtonDown("Interact");
+		input_use = Input.GetButtonUp("Use Item");
 //        input_left = Input.GetButtonDown("");
 //        input_right = Input.GetButtonDown("");
 //        input_down = Input.GetButtonDown("");
@@ -91,6 +94,38 @@ public class player_input_controller : MonoBehaviour
         input_toggleView = Input.GetButtonDown("Toggle Targeting");
         #endregion
 
+		#region Handle movement
+		if (input_XMove > 0 || input_YMove > 0)
+		{
+			if(DEBUG) Debug.Log("input_YMove: " + input_YMove);
+			if(DEBUG) Debug.Log("input_XMove: " + input_XMove);
+			// -sprint
+			if (input_sprint) //and player stamina
+			{ //and !player_character.isSprinting()) {
+				if(DEBUG) Debug.Log("input_sprint");
+				player_character.Sprinting = true;
+			}
+			// -regular motion
+			else 
+			{
+				player_character.Sprinting = false;
+			}
+			//create movement vector based off of camera and movement input
+			// calculate move direction to pass to character
+			//				if (main_CameraTransform != null)
+			//				{
+			// calculate camera relative direction to move:
+			main_CameraForward = Vector3.Scale(main_CameraTransform.forward, new Vector3(1, 0, 1)).normalized;
+			movement_Vector = input_YMove*main_CameraForward + input_XMove*main_CameraTransform.right;
+			//				}
+			//				else
+			//				{
+			//					// we use world-relative directions in the case of no main camera
+			//					movement_Vector = input_v*Vector3.forward + input_h*Vector3.right;
+			//				}
+			player_character.Move(movement_Vector);
+		}
+		#endregion
         if (input_menu)
         {
 			if(DEBUG) Debug.Log("input_menu");
@@ -194,39 +229,6 @@ public class player_input_controller : MonoBehaviour
 				if(DEBUG) Debug.Log("input_dodge");
 				player_character.dodge();	
             }
-            #region Handle movement
-            if (input_XMove > 0 || input_YMove > 0)
-            {
-				if(DEBUG) Debug.Log("input_h");
-				if(DEBUG) Debug.Log("input_v");
-                // -sprint
-                if (input_sprint) //and player stamina
-                { //and !player_character.isSprinting()) {
-					if(DEBUG) Debug.Log("input_sprint");
-					player_character.Sprinting = true;
-                }
-				// -regular motion
-				else 
-				{
-					player_character.Sprinting = false;
-				}
-				//create movement vector based off of camera and movement input
-				// calculate move direction to pass to character
-//				if (main_CameraTransform != null)
-//				{
-					// calculate camera relative direction to move:
-					main_CameraForward = Vector3.Scale(main_CameraTransform.forward, new Vector3(1, 0, 1)).normalized;
-					movement_Vector = input_YMove*main_CameraForward + input_XMove*main_CameraTransform.right;
-					Debug.Log(main_CameraTransform.right);
-//				}
-//				else
-//				{
-//					// we use world-relative directions in the case of no main camera
-//					movement_Vector = input_v*Vector3.forward + input_h*Vector3.right;
-//				}
-				player_character.Move(movement_Vector);
-            }
-            #endregion
             // -Interact 
             if (input_intearct)
             {

@@ -47,7 +47,7 @@ public class CharacterController : MonoBehaviour {
 				float turnAmount = Mathf.Atan2 (move.x, move.z); 
 				float forwardAmount = move.z;
 
-				transform.Rotate (0.1f, turnAmount * turnSpeed * Time.deltaTime, 0); 
+				transform.Rotate (0f, turnAmount * turnSpeed * Time.deltaTime, 0); 
 
 				character_Animator.SetFloat ("Forward", forwardAmount, 0.1f, Time.deltaTime);
 				//character_Animator.applyRootMotion = true;

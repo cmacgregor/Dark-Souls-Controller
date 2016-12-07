@@ -544,7 +544,7 @@ PlayerSettings:
   XboxOne::VR::enabledDevices: []
   iOS::VR::enabledDevices: []
   tvOS::VR::enabledDevices: []
-  cloudProjectId: 
-  projectName: 
-  organizationId: 
+  cloudProjectId: 314d4953-ebf6-445d-9307-9d3ec03a1188
+  projectName: Dark-Souls-Controller
+  organizationId: connor-3594531
   cloudEnabled: 0
