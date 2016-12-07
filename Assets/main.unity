@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44692504, g: 0.4967869, b: 0.57508504, a: 1}
+  m_IndirectSpecularColor: {r: 0.37356418, g: 0.38112003, b: 0.35887662, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_MovingTurnSpeed: 360
-  m_StationaryTurnSpeed: 180
+  m_StationaryTurnSpeed: 360
   m_JumpPower: 12
   m_GravityMultiplier: 2
   m_RunCycleLegOffset: 0.2
@@ -258,7 +258,7 @@ Animator:
   m_GameObject: {fileID: 545031519}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: ca3433f392dc76f4b967744cab09af7c, type: 3}
-  m_Controller: {fileID: 9100000, guid: bb91b80354ce20b42908852bb1c9ce7f, type: 2}
+  m_Controller: {fileID: 9100000, guid: 1166143d1bd9e0243b28a432b90f74da, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -266,17 +266,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &545031525
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 545031519}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bbb7b0c9237ecf49aaa1a069dbd0a40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &545031526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,6 +278,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 1
+  turnSpeed: 1000
 --- !u!114 &545031527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603,7 +593,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &1451036120
 Light:
   m_ObjectHideFlags: 0
