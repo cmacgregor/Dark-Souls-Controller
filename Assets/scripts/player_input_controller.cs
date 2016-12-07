@@ -147,7 +147,7 @@ public class player_input_controller : MonoBehaviour
             if (input_lha)
             {
 				if(DEBUG) Debug.Log("input_lha");
-				player_character.attack (2);
+				player_character.attack (3);
             }
 			// -Kicking attack
 //			if (input_rla && (input_h > 0f || input_h > 0f)) 

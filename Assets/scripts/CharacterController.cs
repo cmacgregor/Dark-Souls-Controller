@@ -31,10 +31,10 @@ public class CharacterController : MonoBehaviour {
 
 	public void Move(Vector3 move)
 	{
-		if (DEBUG) Debug.Log ("CharacterController.move vector3: " + move);
+		//if (DEBUG) Debug.Log ("CharacterController.move vector3: " + move);
 
 		if (isGrounded) {
-			if(DEBUG) Debug.Log("CharacterController is grounded");
+			//if(DEBUG) Debug.Log("CharacterController is grounded");
 			if (sprinting) {
 
 			} else if (targeting_enemy) {
@@ -83,6 +83,8 @@ public class CharacterController : MonoBehaviour {
 		}
 		else if (attack_type == 3) {
 			if (DEBUG) Debug.Log ("CharacterController.attack = left handed heavy action");
+			character_Animator.SetLayerWeight(1, 1.0f);
+			character_Animator.SetTrigger ("HeavyAction");
 		}
 		else if (attack_type == 5) {
 			if (DEBUG) Debug.Log ("CharacterController.attack = kick");
