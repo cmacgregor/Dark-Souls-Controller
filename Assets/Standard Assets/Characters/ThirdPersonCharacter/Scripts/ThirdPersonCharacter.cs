@@ -28,8 +28,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		Vector3 m_CapsuleCenter;
 		CapsuleCollider m_Capsule;
 		bool m_Crouching;
-		bool m_Roll; 
-		bool m_Sprint; 
+
 
 		void Start()
 		{
@@ -43,24 +42,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_OrigGroundCheckDistance = m_GroundCheckDistance;
 		}
 
-		public void Attack(bool attack)
-		{
-			Debug.Log ("Attacking: " + attack);
-			//turn off motion layer
-			m_Animator.SetLayerWeight (0, 0);
-			//turn on combat layer
-			m_Animator.SetLayerWeight (2, 1);
 
-			m_Animator.SetBool("Attack", attack);
-		
-			//turn on motion layer
-			m_Animator.SetLayerWeight (0, 1);
-			//turn on combat layer
-			m_Animator.SetLayerWeight (2, 0);
-
-		}
-
-		public void Move(Vector3 move, bool crouch, bool roll, bool sprint)
+		public void Move(Vector3 move, bool crouch, bool jump)
 		{
 
 			// convert the world relative moveInput vector into a local-relative
@@ -72,20 +55,21 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			move = Vector3.ProjectOnPlane(move, m_GroundNormal);
 			m_TurnAmount = Mathf.Atan2(move.x, move.z);
 			m_ForwardAmount = move.z;
-			m_Roll = roll; 
-			m_Sprint = sprint;
 
 			ApplyExtraTurnRotation();
 
 			// control and velocity handling is different when grounded and airborne:
-			if (!m_IsGrounded)
+			if (m_IsGrounded)
+			{
+				HandleGroundedMovement(crouch, jump);
+			}
+			else
 			{
 				HandleAirborneMovement();
 			}
 
-			//since we are not doing crouching don't handle it
-			//ScaleCapsuleForCrouching(crouch);
-			//PreventStandingInLowHeadroom();
+			ScaleCapsuleForCrouching(crouch);
+			PreventStandingInLowHeadroom();
 
 			// send input and other state parameters to the animator
 			UpdateAnimator(move);
@@ -138,10 +122,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_Animator.SetFloat("Turn", m_TurnAmount, 0.1f, Time.deltaTime);
 			m_Animator.SetBool("Crouch", m_Crouching);
 			m_Animator.SetBool("OnGround", m_IsGrounded);
-			m_Animator.SetBool ("Roll", m_Roll);
-			m_Animator.SetBool ("Sprint", m_Sprint);
-
-			/*
 			if (!m_IsGrounded)
 			{
 				m_Animator.SetFloat("Jump", m_Rigidbody.velocity.y);
@@ -158,7 +138,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			{
 				m_Animator.SetFloat("JumpLeg", jumpLeg);
 			}
-			*/
 
 			// the anim speed multiplier allows the overall speed of walking/running to be tweaked in the inspector,
 			// which affects the movement speed because of the root motion.
@@ -181,6 +160,20 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_Rigidbody.AddForce(extraGravityForce);
 
 			m_GroundCheckDistance = m_Rigidbody.velocity.y < 0 ? m_OrigGroundCheckDistance : 0.01f;
+		}
+
+
+		void HandleGroundedMovement(bool crouch, bool jump)
+		{
+			// check whether conditions are right to allow a jump:
+			if (jump && !crouch && m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Grounded"))
+			{
+				// jump!
+				m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, m_JumpPower, m_Rigidbody.velocity.z);
+				m_IsGrounded = false;
+				m_Animator.applyRootMotion = false;
+				m_GroundCheckDistance = 0.1f;
+			}
 		}
 
 		void ApplyExtraTurnRotation()

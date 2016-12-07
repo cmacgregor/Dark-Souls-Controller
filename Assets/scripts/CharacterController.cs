@@ -4,8 +4,8 @@ using System.Collections;
 public class CharacterController : MonoBehaviour {
 
 	//debug variable
-//	static bool DEBUG = true;
-	static bool DEBUG = false;
+	static bool DEBUG = true;
+//	static bool DEBUG = false;
 
 	public float movementSpeed = 1f;
 	public float turnSpeed = 1000;
@@ -47,7 +47,7 @@ public class CharacterController : MonoBehaviour {
 				float turnAmount = Mathf.Atan2 (move.x, move.z); 
 				float forwardAmount = move.z;
 
-				transform.Rotate (0f, turnAmount * turnSpeed * Time.deltaTime, 0); 
+				transform.Rotate (0, turnAmount * turnSpeed * Time.deltaTime, 0); 
 
 				character_Animator.SetFloat ("Forward", forwardAmount, 0.1f, Time.deltaTime);
 				//character_Animator.applyRootMotion = true;
