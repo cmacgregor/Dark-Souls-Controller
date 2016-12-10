@@ -3,8 +3,9 @@ using System.Collections;
 
 public class player_input_controller : MonoBehaviour {
 	//debug variable
-	static bool DEBUG = true;
-//	static bool DEBUG = false;
+//	static bool DEBUG = true;
+	static bool DEBUG = false;
+
 	#region input variables 
     //movement inputs
     float input_MoveH;      //horizontal directional
