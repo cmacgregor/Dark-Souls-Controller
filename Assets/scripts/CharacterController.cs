@@ -4,8 +4,8 @@ using System.Collections;
 public class CharacterController : MonoBehaviour {
 
 	//debug variable
-	static bool DEBUG = true;
-//	static bool DEBUG = false;
+//	static bool DEBUG = true;
+	static bool DEBUG = false;
 
 	public float movementSpeed = 1f;
 	public float turnSpeed = 1000;
