@@ -49,12 +49,12 @@ public class CharacterController : MonoBehaviour {
 
 				transform.Rotate (0, turnAmount * turnSpeed * Time.deltaTime, 0); 
 
-				character_Animator.SetFloat ("Forward", forwardAmount, 0f, Time.deltaTime);
-				character_Animator.applyRootMotion = true;
+				character_Animator.SetFloat ("Forward", forwardAmount, 0.1f, Time.deltaTime);
+				//character_Animator.applyRootMotion = true;
 
-				Vector3 movementVector = (character_Animator.deltaPosition * movementSpeed) / Time.deltaTime;
-				movementVector.y = character_Rigibody.velocity.y;
-				character_Rigibody.velocity = movementVector;
+				//Vector3 movementVector = (character_Animator.deltaPosition * movementSpeed) / Time.deltaTime;
+				//movementVector.y = character_Rigibody.velocity.y;
+				//character_Rigibody.velocity = movementVector;
 			}
 		}
 		else {
