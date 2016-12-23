@@ -14,9 +14,6 @@ public class CharacterController : MonoBehaviour {
 	private bool sprinting;
 	private bool targeting_enemy;
 	private bool isGrounded;
-	private float character_GravityMultiplier = 2f;
-	private float character_GroundDistance = 0.2f;
-	private float character_GroundDistanceOriginal;
 
 	Rigidbody character_Rigibody;
 	Animator character_Animator; 
@@ -30,14 +27,16 @@ public class CharacterController : MonoBehaviour {
 
 		character_Rigibody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 		sprinting = false;
-		checkIfGrounded();
+		isGrounded = checkIfGrounded();
+
 	}
 
 	public void Move(Vector3 move)
 	{
 		if (DEBUG) Debug.Log ("CharacterController.move vector3: " + move);
-		checkIfGrounded();
+
 		if (isGrounded) {
+			//if(DEBUG) Debug.Log("CharacterController is grounded");
 			if (sprinting) {
 
 			} else if (targeting_enemy) {
@@ -59,22 +58,8 @@ public class CharacterController : MonoBehaviour {
 			}
 		}
 		else {
-			if (DEBUG) Debug.Log ("CharacterController - Move: Airborne");
-			handleAirborneMotion ();
+			//play falling animation
 		}
-	}
-
-	void handleAirborneMotion()
-	{	
-		Debug.Log ("handeling airborne  motion");
-		//play falling animation
-		character_Animator.SetBool("Falling", true);
-		//mitigate forward speed
-		// apply extra gravity from multiplier:
-		Vector3 drag = (Physics.gravity * character_GravityMultiplier) - Physics.gravity;
-		character_Rigibody.AddForce(drag);
-
-		character_GroundDistance = character_Rigibody.velocity.y < 0 ? character_GroundDistanceOriginal : 0.01f;
 	}
 		
 	public void attack(int attack_type)
@@ -138,27 +123,10 @@ public class CharacterController : MonoBehaviour {
 		if(DEBUG) Debug.Log ("CharacterController.interact");
 	}
 
-	private void checkIfGrounded()
+	public bool checkIfGrounded()
 	{
-		RaycastHit hitInfo;
-		#if UNITY_EDITOR
-			// helper to visualise the ground check ray in the scene view
-			Debug.DrawLine(transform.position + (Vector3.up * 0.1f), transform.position + (Vector3.up * 0.1f) + (Vector3.down * character_GroundDistance));
-		#endif
-		// 0.1f is a small offset to start the ray from inside the character
-		// it is also good to note that the transform position in the sample assets is at the base of the character
-		if (Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, character_GroundDistance))
-		{
-			//m_GroundNormal = hitInfo.normal;
-			isGrounded = true;
-			character_Animator.applyRootMotion = true;
-		}
-		else
-		{
-			isGrounded = false;
-			//m_GroundNormal = Vector3.up;
-			character_Animator.applyRootMotion = false;
-		}
+		//raycast to check if characer is grounded 
+		return true;
 	}
 
 	#region property getters and setters
