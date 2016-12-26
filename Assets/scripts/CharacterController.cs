@@ -109,22 +109,12 @@ public class CharacterController : MonoBehaviour {
 	{
 		if(DEBUG) Debug.Log ("CharacterController.dodge");
 		//if stamina allows 
-		if(true)
-		{
-			// -sprint dodge
-			if (sprinting) 
-			{
-				if(DEBUG) Debug.Log ("CharacterController.dodge: sprinting Dodge");
-				//if directional input is being given roll 
-
-				//else just land
-
-			}
-			// -regular roll 
-			else
-			{
-				if(DEBUG) Debug.Log ("player_chacrater.dodge: Regular Dodge");
-			}
+		if (true) {
+//			character_Animator.SetLayerWeight (0, 0f);
+//			character_Animator.SetLayerWeight (1, 1f);
+//			character_Animator.SetLayerWeight (1, 0f);
+//			character_Animator.SetLayerWeight (0, 1f);
+			character_Animator.SetTrigger("Dodge");
 		}
 	}
 
