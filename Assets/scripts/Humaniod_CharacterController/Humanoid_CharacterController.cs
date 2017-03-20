@@ -25,7 +25,7 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 	private int[] character_ReadyItemIDs = new int[5];
 	//Will need to be calculated later based upon stats 
 	private int[] character_ReadySpellIDs = new int[4];
-	private int[] character_ArmorIDs = new int[4];
+	//private int[] character_ArmorIDs = new int[4];
 	//0 - Head
 	//1 - Chest
 	//2 - Arms
@@ -42,8 +42,8 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 	void Start () {
 		//Setup components 
 		character_Animator = GetComponent<Animator>();
-		character_Controller = new CharacterController();
-
+		character_Controller = GetComponent<CharacterController>();
+		//character_Controller.center = 
 	}
 	
 	public void cycleReadyItem() {

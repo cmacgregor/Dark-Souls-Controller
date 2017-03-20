@@ -21,10 +21,10 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 			Vector3 movementVector = (character_Animator.deltaPosition * movementSpeed) / Time.deltaTime;
 			movementVector.y = character_Rigibody.velocity.y;
 			//character_Rigibody.velocity = movementVector; */
-			float forwardAmount = moveVector.z;
-			character_Animator.SetFloat ("Forward", forwardAmount, 0f, Time.deltaTime);
+			//float forwardAmount = moveVector.z;
+			character_Animator.SetFloat ("Forward", moveVector.magnitude, 0f, Time.deltaTime);
 			
-			moveVector = transform.TransformDirection(moveVector);
+			//moveVector = transform.TransformDirection(moveVector);
 			//may handle differently 
 			if(sprinting) moveVector *= character_SprintSpeed;
 			else moveVector *= character_NormalSpeed;
@@ -32,7 +32,7 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 			if (DEBUG) Debug.Log ("CharacterController - Move: Airborne");
 			//handleAirborneMotion ();
 		}
-			moveVector.y -= character_Gravity + Time.deltaTime;
-			character_Controller.Move(moveVector * Time.deltaTime);
+		moveVector.y -= character_Gravity + Time.deltaTime;
+		character_Controller.Move(moveVector * Time.deltaTime);
 	}
 }

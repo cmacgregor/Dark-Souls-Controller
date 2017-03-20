@@ -42,7 +42,7 @@ public class player_input_controller : MonoBehaviour {
     };
 			
     //Character controller 
-	Humanoid_CharacterController player_character;
+    Humanoid_CharacterController player_character;
 	//Movement calculation variables 
 	Transform main_CameraTransform;
 	Vector3 main_CameraForward; 
@@ -64,7 +64,7 @@ public class player_input_controller : MonoBehaviour {
 		input_MoveV = Input.GetAxis("Vertical");
 		input_dodge = Input.GetButtonDown("Dodge");
 		input_sprint = Input.GetButton("Sprint");
-		input_interact = Input.GetButtonDown("Interact");
+		input_interact= Input.GetButtonDown("Interact");
 		input_lla = Input.GetButtonDown("Left Hand Light Action");
 		input_lha = Input.GetButtonUp("Left Hand Heavy Action");
 		input_rla = Input.GetButtonDown("Right Hand Light Action");
