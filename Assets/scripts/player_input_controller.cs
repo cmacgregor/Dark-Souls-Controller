@@ -4,8 +4,9 @@ using System.Collections;
 public class player_input_controller : MonoBehaviour {
 	//debug variable
 //	static bool DEBUG = true;
-	static bool DEBUG = false;
-
+	public static bool DEBUG = false;
+	public static float ANALOG_DEAD_ZONE = 0.1f;
+    
 	#region input variables 
     //movement inputs
     float input_MoveH;      //horizontal directional
@@ -32,9 +33,9 @@ public class player_input_controller : MonoBehaviour {
 	#endregion
 
     //Weapon Toggle variables
-	private const int STANCE_TOGGLE_HOLD_TIME = 60;
-    private int stance_toggle_held_time;
-    enum stance
+	private int stance_toggle_held_time;
+	private static int STANCE_TOGGLE_HOLD_TIME = 60;
+	enum stance
     {
         SingleHand = 0,
         RightHand = 1,
@@ -44,13 +45,10 @@ public class player_input_controller : MonoBehaviour {
     //Character controller 
     Humanoid_CharacterController player_character;
 	//Movement calculation variables 
-	Transform main_CameraTransform;
-	Vector3 main_CameraForward; 
 	Vector3 movement_Vector;
 	//<type>	targeted_enemy; 
     
     void Start() {
-		main_CameraTransform = Camera.main.transform;
         //set character controller
 		player_character = GetComponent<Humanoid_CharacterController>();
 		//set initial button held time
@@ -81,13 +79,11 @@ public class player_input_controller : MonoBehaviour {
 		#endregion
 
 		#region Handle movement
-		if (input_MoveH != 0 || input_MoveV != 0)	{
+		if (input_MoveH != ANALOG_DEAD_ZONE || input_MoveV != ANALOG_DEAD_ZONE)	{
 			if(DEBUG) Debug.Log("input_MoveH" + input_MoveH);
 			if(DEBUG) Debug.Log("input_MoveV" + input_MoveV);
 
-			//create movement vector based off of camera and movement input
-			main_CameraForward = Vector3.Scale(main_CameraTransform.forward, new Vector3(1, 0, 1)).normalized;
-			movement_Vector = input_MoveV*main_CameraForward + input_MoveH*main_CameraTransform.right;
+			move_Vector = new Vector3(input_MoveV, 0, input_MoveH);
 			player_character.Move(movement_Vector);
 			// -sprint
 			if (input_sprint && !player_character.Sprint) { //and player stamina allows 
@@ -101,14 +97,18 @@ public class player_input_controller : MonoBehaviour {
 		}
 		#endregion
 		
+		#region Handle Main Menu
 		if (input_menu)	{
 			if(DEBUG) Debug.Log("input_menu");
 		}
+		#endregion
+		
+		#region Handle Gesture Menu
 		else if (input_gestureMenu)	{
 			if(DEBUG) Debug.Log("input_gestureMenu");
 		}
+		#region Handle Non-menu Button inputs 
 		else {
-			#region Handle Non-menu Button inputs 
 			#region Handle weapon actions
 			//Light actions
 			//Kick
@@ -223,6 +223,11 @@ public class player_input_controller : MonoBehaviour {
     }
 
     void FixedUpdate() {
-
+		//called at a fixed interval independant of fps 
+	}
+	
+	void LateUpdate() {
+		//Called after all other updates
+		//move_Vector = new Vector3(0,0,0);
 	}
 }

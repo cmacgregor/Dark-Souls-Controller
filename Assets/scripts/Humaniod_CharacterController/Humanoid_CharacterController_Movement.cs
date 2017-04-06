@@ -14,7 +14,7 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 			float forwardAmount = move.z;
 
 			transform.Rotate (0, turnAmount * turnSpeed * Time.deltaTime, 0); 
-
+			
 			character_Animator.SetFloat ("Forward", forwardAmount, 0f, Time.deltaTime);
 			//character_Animator.applyRootMotion = true;
 
@@ -22,17 +22,24 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 			movementVector.y = character_Rigibody.velocity.y;
 			//character_Rigibody.velocity = movementVector; */
 			//float forwardAmount = moveVector.z;
-			character_Animator.SetFloat ("Forward", moveVector.magnitude, 0f, Time.deltaTime);
-			
-			//moveVector = transform.TransformDirection(moveVector);
-			//may handle differently 
+			if (moveVector.z != 0 || moveVector.z != 0) {
+				transform.rotation = Quaternion.Euler(transform.eulerAngles.x, 
+														Camera.mainCamera.transform.eulerAngles.y, 
+														transform.eulerAngles.z);
+			}
+			moveVector = transform.TransformDirection(moveVector);
+			if (moveVector.magnitude > 1) 
+				moveVector = Vector3.Normalize(moveVector);
+			//character_Animator.SetFloat ("Forward", moveVector.magnitude, 0f, Time.deltaTime);
 			if(sprinting) moveVector *= character_SprintSpeed;
 			else moveVector *= character_NormalSpeed;
+
+			moveVector *= Time.deltaTime;
 		} else {
 			if (DEBUG) Debug.Log ("CharacterController - Move: Airborne");
 			//handleAirborneMotion ();
 		}
-		moveVector.y -= character_Gravity + Time.deltaTime;
-		character_Controller.Move(moveVector * Time.deltaTime);
+		//moveVector.y -= character_Gravity + Time.deltaTime;
+		character_Controller.Move(moveVector);
 	}
 }
