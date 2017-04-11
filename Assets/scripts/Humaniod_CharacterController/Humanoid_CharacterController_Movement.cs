@@ -24,7 +24,7 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 			//float forwardAmount = moveVector.z;
 			if (moveVector.z != 0 || moveVector.z != 0) {
 				transform.rotation = Quaternion.Euler(transform.eulerAngles.x, 
-														Camera.mainCamera.transform.eulerAngles.y, 
+														Camera.main.transform.eulerAngles.y, 
 														transform.eulerAngles.z);
 			}
 			moveVector = transform.TransformDirection(moveVector);

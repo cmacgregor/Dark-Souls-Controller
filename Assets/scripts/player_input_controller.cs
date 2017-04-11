@@ -83,7 +83,7 @@ public class player_input_controller : MonoBehaviour {
 			if(DEBUG) Debug.Log("input_MoveH" + input_MoveH);
 			if(DEBUG) Debug.Log("input_MoveV" + input_MoveV);
 
-			move_Vector = new Vector3(input_MoveV, 0, input_MoveH);
+			movement_Vector = new Vector3(input_MoveH, 0, input_MoveV);
 			player_character.Move(movement_Vector);
 			// -sprint
 			if (input_sprint && !player_character.Sprint) { //and player stamina allows 
@@ -107,6 +107,8 @@ public class player_input_controller : MonoBehaviour {
 		else if (input_gestureMenu)	{
 			if(DEBUG) Debug.Log("input_gestureMenu");
 		}
+		#endregion
+
 		#region Handle Non-menu Button inputs 
 		else {
 			#region Handle weapon actions

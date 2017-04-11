@@ -11,9 +11,7 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 	public float character_NormalSpeed = 6.0f;
 	
 	private bool sprinting = false;
-	
-	private float character_Gravity = 20.0f;
-	
+
 	//player stats
 	private int character_Stamina;
 	private int character_Health;
