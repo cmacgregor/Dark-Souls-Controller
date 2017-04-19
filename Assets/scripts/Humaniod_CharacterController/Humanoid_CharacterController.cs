@@ -7,9 +7,13 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 //	static bool DEBUG = true;
 	static bool DEBUG = false;
 
+	//public character movement variables 
 	public float character_SprintSpeed = 8.0f;
-	public float character_NormalSpeed = 6.0f;
-	
+	public float character_WeightSpeedMultiplier = 2.0f;
+	//character gravity variables 
+	public float Gravity = 21f;
+	public float TerminalVelocity = 20f;
+
 	private bool sprinting = false;
 
 	//player stats
@@ -69,93 +73,16 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 
 		return index;
 	}
-	
-/* 	void handleAirborneMotion()
-	{	
-		Debug.Log ("handeling airborne  motion");
-		//play falling animation
-		character_Animator.SetBool("Falling", true);
-		//mitigate forward speed
-		// apply extra gravity from multiplier:
-		Vector3 drag = (Physics.gravity * character_GravityMultiplier) - Physics.gravity;	
-	}
- *//* 	public void attack(int attack_type)
-	{
-		//0 = Right Handed Light action
-		//1 = Left Handed Light Action
-		//2 = Right Handed Heavy Action
-		//3 = Left Handed Heavy Action
-		//4 = Kick
-		if (attack_type == 0) {
-			if (DEBUG) Debug.Log ("CharacterController.attack = right handed light action");
-		}
-		else if (attack_type == 1) {
-			if (DEBUG) Debug.Log ("CharacterController.attack = left handed light action");
-			character_Animator.SetLayerWeight(1, 1.0f);
-			character_Animator.SetTrigger ("LightAction");
-		}
-		else if (attack_type == 2) {
-			if (DEBUG) Debug.Log ("CharacterController.attack = right handed heavy action");
-		}
-		else if (attack_type == 3) {
-			if (DEBUG) Debug.Log ("CharacterController.attack = left handed heavy action");
-			character_Animator.SetLayerWeight(1, 1.0f);
-			character_Animator.SetTrigger ("HeavyAction");
-		}
-		else if (attack_type == 5) {
-			if (DEBUG) Debug.Log ("CharacterController.attack = kick");
-		}
-	} */
-
-/* 	public void dodge()
-	{
-		if(DEBUG) Debug.Log ("CharacterController.dodge");
-		//if stamina allows 
-		if (character_Stamina > 0) {
-			character_Animator.SetTrigger("Dodge");
-		}
-	} */
-
-/* 	public void use_item()
-	{
-		if(DEBUG) Debug.Log ("CharacterController.use_item");
-	} */
-
-/* 	public void interact()
-	{
-		if(DEBUG) Debug.Log ("CharacterController.interact");
-	} */
-
-/* 	private void checkIfGrounded()
-	{
-		RaycastHit hitInfo;
-		#if UNITY_EDITOR
-			// helper to visualise the ground check ray in the scene view
-			Debug.DrawLine(transform.position + (Vector3.up * 0.1f), transform.position + (Vector3.up * 0.1f) + (Vector3.down * character_GroundDistance));
-		#endif
-		// 0.1f is a small offset to start the ray from inside the character
-		// it is also good to note that the transform position in the sample assets is at the base of the character
-		if (Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, character_GroundDistance))
-		{
-			//m_GroundNormal = hitInfo.normal;
-			isGrounded = true;
-			character_Animator.applyRootMotion = true;
-		}
-		else
-		{
-			isGrounded = false;
-			//m_GroundNormal = Vector3.up;
-			character_Animator.applyRootMotion = false;
-		}
-	}
-	*/
 	#region property getters and setters
 	public bool Sprint {
 		get {
 			return sprinting;
 		}
 		set {
-			sprinting = value;
+			if (sprinting != value) {
+				sprinting = value;
+				character_Animator.SetBool ("Sprint", value);
+			}
 		}
 	} 
 	#endregion

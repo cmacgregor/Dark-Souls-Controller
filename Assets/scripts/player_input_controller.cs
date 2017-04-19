@@ -3,9 +3,8 @@ using System.Collections;
 
 public class player_input_controller : MonoBehaviour {
 	//debug variable
-//	static bool DEBUG = true;
-	public static bool DEBUG = false;
-	public static float ANALOG_DEAD_ZONE = 0.1f;
+	public bool DEBUG = false;
+	public float ANALOG_DEAD_ZONE = 0.1f;
     
 	#region input variables 
     //movement inputs
@@ -86,8 +85,7 @@ public class player_input_controller : MonoBehaviour {
 			movement_Vector = new Vector3(input_MoveH, 0, input_MoveV);
 			player_character.Move(movement_Vector);
 			// -sprint
-			if (input_sprint && !player_character.Sprint) { //and player stamina allows 
-				if(DEBUG) Debug.Log("input_sprint");
+			if (input_sprint) { //and player stamina allows 
 				player_character.Sprint = true;
 			}
 			// -regular motion

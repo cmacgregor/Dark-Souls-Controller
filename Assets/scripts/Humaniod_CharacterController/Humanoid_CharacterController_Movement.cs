@@ -2,44 +2,38 @@ using UnityEngine;
 using System.Collections;
 
 public partial class Humanoid_CharacterController : MonoBehaviour {
-
+	
 	public void Move(Vector3 moveVector)
 	{
 		if (DEBUG) Debug.Log ("CharacterController.move vector3: " + moveVector);
+		#region Handle Grounded Motion
 		if (character_Controller.isGrounded) {
-			/* 
-			if (move.magnitude > 1f) move.Normalize ();
-			move = transform.InverseTransformDirection (move);
-			float turnAmount = Mathf.Atan2 (move.x, move.z); 
-			float forwardAmount = move.z;
-
-			transform.Rotate (0, turnAmount * turnSpeed * Time.deltaTime, 0); 
-			
-			character_Animator.SetFloat ("Forward", forwardAmount, 0f, Time.deltaTime);
-			//character_Animator.applyRootMotion = true;
-
-			Vector3 movementVector = (character_Animator.deltaPosition * movementSpeed) / Time.deltaTime;
-			movementVector.y = character_Rigibody.velocity.y;
-			//character_Rigibody.velocity = movementVector; */
-			//float forwardAmount = moveVector.z;
-			if (moveVector.z != 0 || moveVector.z != 0) {
+			character_Animator.SetBool ("Falling", false);
+			if (moveVector.magnitude > 1) moveVector = Vector3.Normalize(moveVector);
+			if (moveVector.x != 0 || moveVector.z != 0) {
 				transform.rotation = Quaternion.Euler(transform.eulerAngles.x, 
 														Camera.main.transform.eulerAngles.y, 
-														transform.eulerAngles.z);
+														transform.eulerAngles.z);													
 			}
-			moveVector = transform.TransformDirection(moveVector);
-			if (moveVector.magnitude > 1) 
-				moveVector = Vector3.Normalize(moveVector);
-			//character_Animator.SetFloat ("Forward", moveVector.magnitude, 0f, Time.deltaTime);
-			if(sprinting) moveVector *= character_SprintSpeed;
-			else moveVector *= character_NormalSpeed;
 
+			moveVector = transform.TransformDirection(moveVector);
+			character_Animator.SetFloat ("Forward", moveVector.magnitude, 0f, Time.deltaTime);
+			if (moveVector.x != 0 || moveVector.z != 0) transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveVector), 500f);
+			if(sprinting) moveVector *= character_SprintSpeed;
+			//Apply Character Weight Modifier to movement Vector 
+			moveVector *= character_WeightSpeedMultiplier;
 			moveVector *= Time.deltaTime;
-		} else {
+			character_Controller.Move(moveVector);
+		} 
+		#endregion
+		#region Handle Airborne Motion
+		else {
 			if (DEBUG) Debug.Log ("CharacterController - Move: Airborne");
-			//handleAirborneMotion ();
+			character_Animator.SetBool ("Falling", true);
+			character_Animator.SetFloat ("Forward", 0f, 0f, Time.deltaTime);
+			character_Controller.Move(new Vector3(0, -Gravity, 0) * Time.deltaTime);
 		}
-		//moveVector.y -= character_Gravity + Time.deltaTime;
-		character_Controller.Move(moveVector);
+		#endregion
 	}
+
 }
