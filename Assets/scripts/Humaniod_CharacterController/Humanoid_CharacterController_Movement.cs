@@ -30,7 +30,6 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 		else {
 			if (DEBUG) Debug.Log ("CharacterController - Move: Airborne");
 			character_Animator.SetBool ("Falling", true);
-			character_Animator.SetFloat ("Forward", 0f, 0f, Time.deltaTime);
 			character_Controller.Move(new Vector3(0, -Gravity, 0) * Time.deltaTime);
 		}
 		#endregion
