@@ -24,3 +24,8 @@ ExportedObj/
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
+UnityPackageManager/manifest.json
+.vs/Dark-Souls-Controller/v15/Server/sqlite3/storage.ide-wal
+.vs/Dark-Souls-Controller/v15/Server/sqlite3/storage.ide-shm
+.vs/Dark-Souls-Controller/v15/Server/sqlite3/storage.ide
+.vs/Dark-Souls-Controller/v15/Server/sqlite3/db.lock

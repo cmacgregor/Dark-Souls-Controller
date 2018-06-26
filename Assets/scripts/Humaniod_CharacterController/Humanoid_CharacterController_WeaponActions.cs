@@ -2,32 +2,36 @@ using UnityEngine;
 using System.Collections;
 
 public partial class Humanoid_CharacterController : MonoBehaviour {
-	//Weapon Actions
+    //Weapon Actions
+    public enum actionID
+    {
+        Light, 
+        Kick, 
+        Heavy, 
+        Charged, 
+        Lunge
+    };
 
-	public void leftSideAction(short action_id) {
+    public void leftSideAction(short action) {
 		if (DEBUG) Debug.Log("side: left"); 
 		character_Animator.SetBool("LeftSideAction", true);
-		weaponAction(action_id);
+		weaponAction((actionID)action);
 	}
-	public void rightSideAction(short action_id){
+
+	public void rightSideAction(short action){
 		if (DEBUG) Debug.Log("side: right"); 
 		character_Animator.SetBool("LeftSideAction", false);
-		weaponAction(action_id);		
+		weaponAction((actionID)action);		
 	}
-	private void weaponAction(short action_id) {
-		//action_id:
-		//	0 - light action
-		//	1 - kick 
-		//	2 - charged heavy
-		//	3 - heavy action 
-		//	4 - lunging attack 
-		if (DEBUG) Debug.Log("action_id: " + action_id); 
+
+	private void weaponAction(actionID action) {
+		if (DEBUG) Debug.Log("action_id: " + action); 
 		//If player has enough stamina 
 		if (character_Stamina > 0) {
 			//Perform action  
-			character_Animator.SetInteger("WeaponActionID", action_id);
+			character_Animator.SetInteger("WeaponActionID", (int)action);
 			//reduce stamina by the used actions cost
-			if (action_id == 0) character_Stamina -= kick_stamina_cost;
+			if (action == 0) character_Stamina -= kick_stamina_cost;
 		}	
 	}
 }

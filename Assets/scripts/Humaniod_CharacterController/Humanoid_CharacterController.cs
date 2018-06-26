@@ -16,23 +16,34 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 
 	private bool sprinting = false;
 
-	//player stats
-	private int character_Stamina;
+    //private definitions 
+    private const int ITEM_SLOTS = 5;
+
+    private const int WEAPON_SLOTS = 3;
+    private const int MAGIC_SLOTS = 3;
+
+    private const int ARMOR_SLOTS = 4;
+    private enum ArmorSlots
+    {
+        Head,
+        Body,
+        Arms,
+        Feet
+    };
+
+    //player stats
+    private int character_Stamina;
 	private int character_Health;
 	private int kick_stamina_cost = 20;
-	
-	//player equipment
-	private int[] character_LeftSide_WeaponIDs = new int[3]; 
-	private int[] character_RightSide_WeaponIDs = new int[3]; 
-	private int[] character_ReadyItemIDs = new int[5];
-	//Will need to be calculated later based upon stats 
-	private int[] character_ReadySpellIDs = new int[4];
-	//private int[] character_ArmorIDs = new int[4];
-	//0 - Head
-	//1 - Chest
-	//2 - Arms
-	//3 - Legs 
-	private int activeLeftWeapon = 0;
+
+    //player equipment
+    private int[] equipped_Armor = new int[ARMOR_SLOTS];
+    private int[] equipped_Items = new int[ITEM_SLOTS];
+    private int[] equipped_Spells = new int[MAGIC_SLOTS];
+    private int[] equipped_LeftSideWeapons = new int[WEAPON_SLOTS]; 
+	private int[] equipped_RightSideWeapons = new int[WEAPON_SLOTS];
+
+    private int activeLeftWeapon = 0;
 	private int activeRightWeapon = 0;
 	private int activeReadyItem = 0;
 	private int activeSpell = 0;
@@ -49,20 +60,20 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 	}
 	
 	public void cycleReadyItem() {
-		activeReadyItem = cycleEquipment (character_ReadyItemIDs, activeReadyItem);
+		activeReadyItem = cycleEquipment (equipped_Items, activeReadyItem);
 		Debug.Log(activeReadyItem);
 		
 	}
 	public void cycleSpells() {
-		activeSpell = cycleEquipment (character_ReadySpellIDs, activeSpell);
+		activeSpell = cycleEquipment (equipped_Spells, activeSpell);
 		Debug.Log(activeSpell);
 	}
 	public void cycleLeftWeapon() {
-		activeLeftWeapon = cycleEquipment (character_LeftSide_WeaponIDs, activeLeftWeapon);
+		activeLeftWeapon = cycleEquipment (equipped_LeftSideWeapons, activeLeftWeapon);
 		Debug.Log(activeLeftWeapon);
 	}
 	public void cycleRightWeapon() {
-		activeRightWeapon = cycleEquipment (character_RightSide_WeaponIDs, activeRightWeapon);
+		activeRightWeapon = cycleEquipment (equipped_RightSideWeapons, activeRightWeapon);
 		Debug.Log(activeRightWeapon);
 	}
 
@@ -73,6 +84,7 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 
 		return index;
 	}
+
 	#region property getters and setters
 	public bool Sprint {
 		get {
@@ -84,6 +96,7 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 				character_Animator.SetBool ("Sprint", value);
 			}
 		}
-	} 
-	#endregion
+	}
+    #endregion
+
 }

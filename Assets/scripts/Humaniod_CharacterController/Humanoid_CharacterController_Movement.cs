@@ -26,6 +26,7 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 			character_Controller.Move(moveVector);
 		} 
 		#endregion
+
 		#region Handle Airborne Motion
 		else {
 			if (DEBUG) Debug.Log ("CharacterController - Move: Airborne");
@@ -33,6 +34,7 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 			character_Controller.Move(new Vector3(0, -Gravity, 0) * Time.deltaTime);
 		}
 		#endregion
+
 	}
 
 }
