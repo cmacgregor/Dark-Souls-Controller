@@ -3,12 +3,11 @@ using System.Collections;
 
 public partial class Humanoid_CharacterController : MonoBehaviour {
 
-	//debug variable
-//	static bool DEBUG = true;
-	static bool DEBUG = false;
+    //debug variable
+    public bool DEBUG = true;
 
-	//public character movement variables 
-	public float character_SprintSpeed = 8.0f;
+    //public character movement variables 
+    public float character_SprintSpeed = 8.0f;
 	public float character_WeightSpeedMultiplier = 2.0f;
 	//character gravity variables 
 	public float Gravity = 21f;
@@ -43,46 +42,70 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
     private int[] equipped_LeftSideWeapons = new int[WEAPON_SLOTS]; 
 	private int[] equipped_RightSideWeapons = new int[WEAPON_SLOTS];
 
-    private int activeLeftWeapon = 0;
-	private int activeRightWeapon = 0;
-	private int activeReadyItem = 0;
-	private int activeSpell = 0;
-
+    private ushort activeLeftWeaponSlot = 0;
+	private ushort activeRightWeaponSlot = 0;
+	private ushort activeReadyItemSlot = 0;
+	private ushort activeSpellSlot = 0;
 	
-	private Animator character_Animator; 
+	private Animator character_Animator;
+   
 	private CharacterController character_Controller;
 
 	void Start () {
 		//Setup components 
 		character_Animator = GetComponent<Animator>();
 		character_Controller = GetComponent<CharacterController>();
-		//character_Controller.center = 
+
+        TEST_fillAllEquipmentSlots();
 	}
 	
 	public void cycleReadyItem() {
-		activeReadyItem = cycleEquipment (equipped_Items, activeReadyItem);
-		Debug.Log(activeReadyItem);
-		
-	}
-	public void cycleSpells() {
-		activeSpell = cycleEquipment (equipped_Spells, activeSpell);
-		Debug.Log(activeSpell);
-	}
-	public void cycleLeftWeapon() {
-		activeLeftWeapon = cycleEquipment (equipped_LeftSideWeapons, activeLeftWeapon);
-		Debug.Log(activeLeftWeapon);
-	}
-	public void cycleRightWeapon() {
-		activeRightWeapon = cycleEquipment (equipped_RightSideWeapons, activeRightWeapon);
-		Debug.Log(activeRightWeapon);
+        activeReadyItemSlot = cycleEquipment (ref equipped_Items, activeReadyItemSlot);
+
+        if (DEBUG) Debug.Log("New Ready Item Slot: " + activeReadyItemSlot);
+    }
+    public void cycleSpells() {
+		activeSpellSlot = cycleEquipment (ref equipped_Spells, activeSpellSlot);
+
+        if (DEBUG) Debug.Log("New Spell Slot: " + activeSpellSlot);
+
+    }
+
+    public void cycleLeftWeapon()
+    {
+        activeLeftWeaponSlot = cycleWeapon(ref equipped_LeftSideWeapons, ref activeLeftWeaponSlot);
+        //character_Animator.Play("equipLeftWeapon");
+
+        if (DEBUG) Debug.Log("New Left Side Weapon Slot: " + activeLeftWeaponSlot);
+
+    }
+
+    public void cycleRightWeapon()
+    {
+        activeRightWeaponSlot = cycleWeapon(ref equipped_RightSideWeapons, ref activeRightWeaponSlot);
+        //character_Animator.Play("equipRightWeapon");
+
+        if (DEBUG) Debug.Log("New Right Side Weapon Slot: " + activeRightWeaponSlot);
+
+    }
+
+    private ushort cycleWeapon(ref int[] equippedWeapons, ref ushort currentWeaponSlot) {
+        ushort newWeaponSlot = cycleEquipment (ref equippedWeapons, currentWeaponSlot);
+
+        return newWeaponSlot;
 	}
 
-	private int cycleEquipment(int[] equipmentArr, int  index) {
-		if ((index++ <= equipmentArr.Length) & (equipmentArr [index++] != 0))
-			index++;  
-		else index = 0;
+    private ushort cycleEquipment(ref int[] equipmentArr, ushort index) {
+        if (index+1 < equipmentArr.Length)
+        {
+            index++;
+        }
+        else
+        {
+            index = 0;
+        }
 
-		return index;
+        return index;
 	}
 
 	#region property getters and setters
@@ -99,4 +122,22 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
 	}
     #endregion
 
+    #region Test helper functions
+    private void TEST_fillAllEquipmentSlots()
+    {
+        TEST_fillEquipementType(ref equipped_Armor);
+        TEST_fillEquipementType(ref equipped_Items);
+        TEST_fillEquipementType(ref equipped_LeftSideWeapons);
+        TEST_fillEquipementType(ref equipped_RightSideWeapons);
+        TEST_fillEquipementType(ref equipped_Spells);
+    }
+
+    private void TEST_fillEquipementType(ref int[] equipArr)
+    {
+        for(int i = 1; i > equipArr.Length; i++)
+        {
+            equipArr[i] = i + 1;
+        }
+    }
+    #endregion
 }
