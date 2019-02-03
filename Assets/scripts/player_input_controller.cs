@@ -32,7 +32,7 @@ public class player_input_controller : MonoBehaviour {
     #endregion
 
     //Weapon Toggle variables
-    private int stance_toggle_held_time;
+    private int stance_toggle_held_time = 0;
 	private static int STANCE_TOGGLE_HOLD_TIME = 60;
     
     //Character controller 
@@ -44,8 +44,6 @@ public class player_input_controller : MonoBehaviour {
     void Start() {
         //set character controller
 		player_character = GetComponent<Humanoid_CharacterController>();
-		//set initial button held time
-		stance_toggle_held_time = 0;
     }
 
     // Update is called once per frame
@@ -54,7 +52,7 @@ public class player_input_controller : MonoBehaviour {
         parseInputs();
         handleInputs();
     }
-
+        
     private void handleInputs()
     {
         if (input_mainMenu || input_gestureMenu)
@@ -63,171 +61,188 @@ public class player_input_controller : MonoBehaviour {
         }
         else
         {
-            #region Handle Directional buttons
-            if (input_leftSideItemCycle)
-            {
-                player_character.cycleLeftWeapon();
-            }
-            else if (input_rightSideItemCycle)
-            {
-                player_character.cycleRightWeapon();
-            }
-            else if (input_upItemCycle)
-            {
-                player_character.cycleSpells();
-            }
-            else if (input_downItemCycle)
-            {
-                player_character.cycleReadyItem();
-            }
-            #endregion
+            handleActions();
+        }
+        handleLocomotion();
+    }
 
-            #region Handle Toggle View
-            if (input_toggleTargetCamera)
+    private void handleMenus()
+    {
+        if (input_mainMenu)
+        {
+            if (DEBUG) Debug.Log("input_menu");
+        }
+        else if (input_gestureMenu)
+        {
+            if (DEBUG) Debug.Log("input_gestureMenu");
+        }
+    }
+
+    private void handleActions()
+    {
+        #region Handle Equipement Cycling
+        if (input_leftSideItemCycle)
+        {
+            player_character.cycleLeftWeapon();
+        }
+        else if (input_rightSideItemCycle)
+        {
+            player_character.cycleRightWeapon();
+        }
+        else if (input_upItemCycle)
+        {
+            player_character.cycleSpells();
+        }
+        else if (input_downItemCycle)
+        {
+            player_character.cycleReadyItem();
+        }
+        #endregion
+
+        #region Handle Toggle View
+        if (input_toggleTargetCamera)
+        {
+            if (DEBUG) Debug.Log("input_toggleView");
+            //            //enemy is in line of site
+            //			if (player_character.isInFOV("Enemy")) {
+            //				//lock on to enemy
+            //				targeted_enemy = player_chatacter.getClosestEnemiesInFOV();
+            //			}
+            //			//else center camera
+            //			else {
+            //
+            //			}
+        }
+        #endregion
+
+        #region Handle Non-menu actions
+
+        #region Handle weapon actions
+
+        #region Light actions
+        //Light action right
+        if (input_rightLightAttack)
+        {
+            //Kick
+            if (movement_Vector.magnitude < ANALOG_DEAD_ZONE)
             {
-                if (DEBUG) Debug.Log("input_toggleView");
-                //            //enemy is in line of site
-                //			if (player_character.isInFOV("Enemy")) {
-                //				//lock on to enemy
-                //				targeted_enemy = player_chatacter.getClosestEnemiesInFOV();
-                //			}
-                //			//else center camera
-                //			else {
-                //
-                //			}
+                if (DEBUG) Debug.Log("movement + rha");
+                player_character.rightSideAction(1);
             }
-            #endregion
-
-            #region Handle Non-menu Button inputs 
-
-            #region Handle weapon actions
-
-            #region Light actions
-            //Light action right
-            if (input_rightLightAttack)
+            else
             {
-                //Kick
-                if (movement_Vector.magnitude < ANALOG_DEAD_ZONE)
-                {
-                    if (DEBUG) Debug.Log("movement + rha");
-                    player_character.rightSideAction(1);
-                }
-                else
-                {
-                    if (DEBUG) Debug.Log("input_rla");
-                    player_character.rightSideAction(0);
-                }
+                if (DEBUG) Debug.Log("input_rla");
+                player_character.rightSideAction(0);
             }
-
-            //Light action Left
-            if (input_leftLightAttack)
-            {
-                if (DEBUG) Debug.Log("input_lla");
-                player_character.leftSideAction(0);
-            }
-            #endregion
-
-            #region Heavy Actions
-            //Heavy Hold Right
-            //if (Input.GetButton ("Right Hand Heavy Action")) {
-            //	player_character.rightSideAction(2);
-            //}
-            //Heavy Hold left
-            //if (Input.GetButton ("Left Hand Heavy Action")) {
-            //	player_character.leftSideAction(2);
-            //}
-            // -Heavy action Right
-            if (input_rightHeavyAttack)
-            {
-                //lunge attack 
-                if (Input.GetButton("Right Hand Heavy Action") && movement_Vector.magnitude < ANALOG_DEAD_ZONE)
-                {
-                    if (DEBUG) Debug.Log("movement + rha");
-                    player_character.rightSideAction(4);
-                }
-                else
-                {
-                    if (DEBUG) Debug.Log("input_rha");
-                    player_character.rightSideAction(3);
-                }
-            }
-            // -Heavy action Left 
-            if (input_leftHeavyAttack)
-            {
-                if (DEBUG) Debug.Log("input_lha");
-                player_character.leftSideAction(3);
-            }
-            #endregion
-
-            #endregion
-
-            #region handle two handed stance changes 
-            //check if weapon toggle button has been pressed
-            if (Input.GetButton("Two-handed Toggle"))
-            {
-                stance_toggle_held_time++;
-            }
-            //if weapon toggle button has been released
-            if (input_toggleTwoHanded)
-            {
-                if (DEBUG) Debug.Log("input_tth");
-                if (DEBUG) Debug.Log("button_held_time: " + stance_toggle_held_time);
-                if (player_character.getWeaponStance() == Humanoid_CharacterController.weapon_Stance.SingleHanded)
-                {
-                    //if held down two hand left hand 
-                    if (stance_toggle_held_time > STANCE_TOGGLE_HOLD_TIME)
-                    {
-                        if (DEBUG) Debug.Log("stance = LeftHanded");
-                        player_character.setWeaponStance(Humanoid_CharacterController.weapon_Stance.LeftHandedTwoHand);
-                    }
-                    //else two hand right hand weapon
-                    else
-                    {
-                        if (DEBUG) Debug.Log("stance = RightHanded");
-                        player_character.setWeaponStance(Humanoid_CharacterController.weapon_Stance.RightHandedTwoHand);
-                    }
-                }
-                else
-                {
-                    if (DEBUG) Debug.Log("stance = SingleHanded");
-                    player_character.setWeaponStance(Humanoid_CharacterController.weapon_Stance.SingleHanded);
-                }
-                stance_toggle_held_time = 0;
-            }
-            #endregion
-
-            // -Dodge
-            if (input_dodge)
-            {
-                if (DEBUG) Debug.Log("input_dodge");
-                player_character.dodge();
-            }
-
-            // -Interact 
-            if (input_interact)
-            {
-                if (DEBUG) Debug.Log("input_interact");
-                player_character.interact();
-            }
-
-            // -Use Item
-            if (input_useItem)
-            {
-                if (DEBUG) Debug.Log("input_use");
-                player_character.useItem();
-            }
-            #endregion
-
         }
 
-        #region Handle movement
+        //Light action Left
+        if (input_leftLightAttack)
+        {
+            if (DEBUG) Debug.Log("input_lla");
+            player_character.leftSideAction(0);
+        }
+        #endregion
+
+        #region Heavy Actions
+        //Heavy Hold Right
+        //if (Input.GetButton ("Right Hand Heavy Action")) {
+        //	player_character.rightSideAction(2);
+        //}
+        //Heavy Hold left
+        //if (Input.GetButton ("Left Hand Heavy Action")) {
+        //	player_character.leftSideAction(2);
+        //}
+        // -Heavy action Right
+        if (input_rightHeavyAttack)
+        {
+            //lunge attack 
+            if (Input.GetButton("Right Hand Heavy Action") && movement_Vector.magnitude < ANALOG_DEAD_ZONE)
+            {
+                if (DEBUG) Debug.Log("movement + rha");
+                player_character.rightSideAction(4);
+            }
+            else
+            {
+                if (DEBUG) Debug.Log("input_rha");
+                player_character.rightSideAction(3);
+            }
+        }
+        // -Heavy action Left 
+        if (input_leftHeavyAttack)
+        {
+            if (DEBUG) Debug.Log("input_lha");
+            player_character.leftSideAction(3);
+        }
+        #endregion
+
+        #endregion
+
+        #region handle two handed stance changes 
+        //check if weapon toggle button has been pressed
+        if (Input.GetButton("Two-handed Toggle"))
+        {
+            stance_toggle_held_time++;
+        }
+        //if weapon toggle button has been released
+        if (input_toggleTwoHanded)
+        {
+            if (DEBUG) Debug.Log("input_tth");
+            if (DEBUG) Debug.Log("button_held_time: " + stance_toggle_held_time);
+            if (player_character.getWeaponStance() == Humanoid_CharacterController.weapon_Stance.SingleHanded)
+            {
+                //if held down two hand left hand 
+                if (stance_toggle_held_time > STANCE_TOGGLE_HOLD_TIME)
+                {
+                    if (DEBUG) Debug.Log("stance = LeftHanded");
+                    player_character.setWeaponStance(Humanoid_CharacterController.weapon_Stance.LeftHandedTwoHand);
+                }
+                //else two hand right hand weapon
+                else
+                {
+                    if (DEBUG) Debug.Log("stance = RightHanded");
+                    player_character.setWeaponStance(Humanoid_CharacterController.weapon_Stance.RightHandedTwoHand);
+                }
+            }
+            else
+            {
+                if (DEBUG) Debug.Log("stance = SingleHanded");
+                player_character.setWeaponStance(Humanoid_CharacterController.weapon_Stance.SingleHanded);
+            }
+            stance_toggle_held_time = 0;
+        }
+        #endregion
+
+        // -Dodge
+        if (input_dodge)
+        {
+            if (DEBUG) Debug.Log("input_dodge");
+            player_character.dodge();
+        }
+
+        // -Interact 
+        if (input_interact)
+        {
+            if (DEBUG) Debug.Log("input_interact");
+            player_character.interact();
+        }
+
+        // -Use Item
+        if (input_useItem)
+        {
+            if (DEBUG) Debug.Log("input_use");
+            player_character.useItem();
+        }
+        #endregion
+    }
+
+    private void handleLocomotion()
+    {
         if (input_axisHorizontal != ANALOG_DEAD_ZONE || input_axisVertical != ANALOG_DEAD_ZONE)
         {
-            if (DEBUG) Debug.Log("input_MoveH" + input_axisHorizontal);
-            if (DEBUG) Debug.Log("input_MoveV" + input_axisVertical);
+            //if (DEBUG) Debug.Log("input_MoveH" + input_axisHorizontal);
+            //if (DEBUG) Debug.Log("input_MoveV" + input_axisVertical);
 
-            movement_Vector = new Vector3(input_axisHorizontal, 0, input_axisVertical);
-            player_character.Move(movement_Vector);
             // -sprint
             if (input_sprint)
             { //and player stamina allows 
@@ -238,18 +253,10 @@ public class player_input_controller : MonoBehaviour {
             {
                 player_character.Sprint = false;
             }
+            movement_Vector = new Vector3(input_axisHorizontal, 0, input_axisVertical);
+            player_character.Move(movement_Vector);
         }
-        #endregion
     }
-
-    void FixedUpdate() {
-		//called at a fixed interval independant of fps 
-	}
-	
-	void LateUpdate() {
-		//Called after all other updates
-		//move_Vector = new Vector3(0,0,0);
-	}
 
     private void parseInputs()
     {
@@ -271,17 +278,5 @@ public class player_input_controller : MonoBehaviour {
         input_upItemCycle = Input.GetButtonDown("Cycle Ready Spells");
         input_gestureMenu = Input.GetButtonDown("Gesture Menu");
         input_mainMenu = Input.GetButtonDown("Menu");
-    }
-
-    private void handleMenus()
-    {
-        if (input_mainMenu)
-        {
-            if (DEBUG) Debug.Log("input_menu");
-        }
-        else if (input_gestureMenu)
-        {
-            if (DEBUG) Debug.Log("input_gestureMenu");
-        }
     }
 }

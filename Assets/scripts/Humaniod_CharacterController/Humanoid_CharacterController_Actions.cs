@@ -13,7 +13,7 @@ public partial class Humanoid_CharacterController : MonoBehaviour {
     // -Use Item
     public void useItem() {
 		// based upon selected item play animation and apply effect
-		Debug.Log(equipped_Items[activeReadyItem]);
+		if(DEBUG) Debug.Log(equipped_Items[activeReadyItemSlot]);
 	}
 	//Set Weapon stance
 	public void setWeaponStance(weapon_Stance stance) {
