@@ -1,0 +1,50 @@
+Modules:
+	Soulsborne controller
+		left stick controls character motion
+		right stick controls camera motion 
+		right shoulder button performs right side weapon light action 
+		right trigger button performs right side weapon heavy action
+		left shoulder button performs left side weapon light action 
+		left trigger button performs left side weapon heavy action
+		top face button switches to two handing right hand weapon:
+			holding top face button switches to two handing left hand weapon
+			if top face button is pressed while two handing either side two handing stops
+		button face button interacts with environment
+		left face button uses current item
+		right face button rolls on press:
+			if no direction is being held do backstep
+		right face button sprints on hold:
+			pressing right face button while sprinting jumps:
+				holding a direction during sprint causes a roll afterwards
+				not holding a direction causes a hard plant
+		right stick click locks on to nearest enemy:
+			camera locks onto targeted enemy
+			player motion becomes centripital around the targeted enemy
+			move between targets within range using right stick left and right
+			moving too far away from target breacks lock on 
+		d-pad down cyvles through items
+		d-pad left cycles left hand equipment
+		d-pad right cycles right hand equipment
+		Start button opens start menu
+		Select button brings up gesture menu
+
+		Souls:
+			d-pad Up changes spells 
+		Souls2:
+			clicking left stick while sprinting jumps
+			holding top face button with compatible weapons toggles power stance
+		Souls3: 	
+		Borne:
+			Locked on Dodging becomes dashing
+			Dediicated heal button 
+			d-pad Up replenishes item for health
+			Holding a heavy attack charges the attack:
+				If the held button is released the animation plays
+				The animation will play after a set amount of time
+			
+	Soulsborne networking
+
+	Player matchmaking 
+
+	Procedural dungeon generation 
+
