@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OverworldCharacter : MonoBehaviour {
 
-    protected CharacterController characterController;
-    protected Animator animationTree;
-    protected CharacterActionController actionController;
+    public ICharacterController characterController;
+    public IAnimator animationTree;
+    public IActionController actionController;
 }
