@@ -2,7 +2,8 @@
 using System.Collections;
 using HumanoidCharacterClass;
 
-public class localInputController : CharacterActionController {
+public class LocalInputController : ICharacterController
+ {
 	//debug variable
 	public bool DEBUG = false;
 	public float ANALOG_DEAD_ZONE = 0.1f;
