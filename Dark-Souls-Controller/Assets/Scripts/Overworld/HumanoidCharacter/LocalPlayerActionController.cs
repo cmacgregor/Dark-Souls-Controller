@@ -3,14 +3,26 @@ using System.Collections.Generic;
 
 public class LocalPlayerActionController : IActionController, IKillable, IDamageable
  {
+    Animator characterAnimator;
+    
 
-    private bool sprinting = false;
+    public float ANALOG_DEAD_ZONE = 0.1f;
 
     private float interactionRadius = 1.0f;
 
+    //Weapon Toggle variables
+    private int stance_toggle_held_time = 0;
+    private static int STANCE_TOGGLE_HOLD_TIME = 60;
+
+    //<type>	targeted_enemy; 
+
+    //Movement calculation variables 
+    Vector3 movement_Vector;
+
     //Character movement variables 
+    private bool sprinting = false;
     public float sprintSpeed = 4.0f;
-    public float weightSpeedMultiplier = 2.0f;
+    public float sprintSpeedMultiplier = 2.0f;
 
     //character gravity variables 
     public float Gravity = 21f;
@@ -50,7 +62,9 @@ public class LocalPlayerActionController : IActionController, IKillable, IDamage
     private ushort activeReadyItemSlot = 0;
     private ushort activeSkillSlot = 0;
 
-    private void handleInputs( List<bool> currentInputs)
+    #region Interface Functions
+
+    public void handleInputs(List<bool> currentInputs)
     {
         if (input_mainMenu || input_secondaryMenu)
         {
@@ -63,15 +77,31 @@ public class LocalPlayerActionController : IActionController, IKillable, IDamage
         handleLocomotion();
     }
 
+    public void Damage(int damageInflicted)
+    {
+        //calculated damge taken 
+
+        //play corresponding animation
+
+    }
+
+    public void Kill()
+    {
+        //play animation
+
+        //display game over message
+    }
+    #endregion
+
     private void handleMenus()
     {
         if (input_mainMenu)
         {
-            if (DEBUG) Debug.Log("input_menu");
+            Debug.Log("input_menu");
         }
         else if (input_secondaryMenu)
         {
-            if (DEBUG) Debug.Log("input_secondaryMenu");
+            Debug.Log("input_secondaryMenu");
         }
     }
 
@@ -99,7 +129,7 @@ public class LocalPlayerActionController : IActionController, IKillable, IDamage
         #region Handle Toggle View
         if (input_toggleTargetCamera)
         {
-            if (DEBUG) Debug.Log("input_toggleView");
+            Debug.Log("input_toggleView");
             //            //enemy is in line of site
             //			if (player_character.isInFOV("Enemy")) {
             //				//lock on to enemy
@@ -157,14 +187,13 @@ public class LocalPlayerActionController : IActionController, IKillable, IDamage
             }
             else
             {
-                if (DEBUG) Debug.Log("input_rha");
                 playerCharacter.rightSideAction(3);
             }
         }
         // -Heavy action Left 
         if (input_leftHeavyAttack)
         {
-             playerCharacter.leftSideAction(3);
+            playerCharacter.leftSideAction(3);
         }
         #endregion
 
@@ -194,7 +223,6 @@ public class LocalPlayerActionController : IActionController, IKillable, IDamage
             }
             else
             {
-                if (DEBUG) Debug.Log("stance = SingleHanded");
                 playerCharacter.setWeaponStance(HumanoidCharacterClass.HumanoidCharacter.weapon_Stance.SingleHanded);
             }
             stance_toggle_held_time = 0;
@@ -204,84 +232,70 @@ public class LocalPlayerActionController : IActionController, IKillable, IDamage
         // -Dodge
         if (input_dodge)
         {
-            if (DEBUG) Debug.Log("input_dodge");
             playerCharacter.dodge();
         }
 
         // -Interact 
         if (input_interact)
         {
-            if (DEBUG) Debug.Log("input_interact");
             playerCharacter.interact();
         }
 
         // -Use Item
         if (input_useItem)
         {
-            if (DEBUG) Debug.Log("input_use");
             playerCharacter.useItem();
         }
         #endregion
     }
 
-    #region Interface Functions
-    public void Damage(int damageInflicted)
-    {
-        //calculated damge taken 
-
-        //play corresponding animation
-
-    }
-
-    public void Kill()
-    {
-        //play animation
-
-        //display game over message
-    }
-    #endregion
-    
     private void handleLocomotion()
     {
         if (input_axisHorizontal != ANALOG_DEAD_ZONE || input_axisVertical != ANALOG_DEAD_ZONE)
         {
-            //if (DEBUG) Debug.Log("input_MoveH" + input_axisHorizontal);
-            //if (DEBUG) Debug.Log("input_MoveV" + input_axisVertical);
-
             // -sprint
             if (input_sprint)
             { //and player stamina allows 
-                playerCharacter.Sprint = true;
+                sprinting = true;
             }
             // -regular motion
             else
             {
-                playerCharacter.Sprint = false;
+                sprinting = false;
             }
             movement_Vector = new Vector3(input_axisHorizontal, 0, input_axisVertical);
             playerCharacter.Move(movement_Vector);
         }
     }
-
     #region Action Functions
-    // -Use Item
+    
     public void useItem()
     {
         // based upon selected item play animation and apply effect
-        if (DEBUG) Debug.Log(equippedItems[activeReadyItemSlot]);
+        Debug.Log(equippedItems[activeReadyItemSlot]);
     }
-    //Set Weapon stance
+
+    public void dodge()
+    {
+        //if stamina allows 
+        if (stamina > 0)
+        {
+            animationTree.SetTrigger("Dodge");
+            //turn collisions off 
+        }
+    }
+
     public void setWeaponStance(weapon_Stance stance)
     {
         if ((int)stance > 3) stance = 0;
         animationTree.SetInteger("Stance", (int)stance);
     }
-    //Get Weapon Stance 
+    
     public weapon_Stance getWeaponStance()
     {
         return (weapon_Stance)animationTree.GetInteger("Stance");
     }
-    // -Interact
+    
     public void checkForInteraction()
     {
         RaycastHit hitObject;
@@ -297,7 +311,7 @@ public class LocalPlayerActionController : IActionController, IKillable, IDamage
     }
     #endregion
 
-       #region Movement Functions
+    #region Movement Functions
     public void Move(Vector3 moveVector)
     {
         if (characterController.isGrounded)
@@ -327,7 +341,7 @@ public class LocalPlayerActionController : IActionController, IKillable, IDamage
         if (sprinting) moveVector *= sprintSpeed;
 
         //Apply Character Weight Modifier to movement Vector 
-        moveVector *= weightSpeedMultiplier;
+        moveVector *= sprintSpeedMultiplier;
         moveVector *= Time.deltaTime;
         characterController.Move(moveVector);
         return moveVector;
@@ -364,17 +378,7 @@ public class LocalPlayerActionController : IActionController, IKillable, IDamage
         }
     }
     #endregion
-
-        // -Dodge
-    public void dodge()
-    {
-        //if stamina allows 
-        if (stamina > 0)
-        {
-            animationTree.SetTrigger("Dodge");
-            //turn collisions off 
-        }
-    }
+   
     #endregion
     
     #region Equipment Item Management Functions
@@ -529,9 +533,5 @@ public class LocalPlayerActionController : IActionController, IKillable, IDamage
         return ITEM_SLOTS;
     }
 
-    public void handleInputs(List<bool> currentInputs)
-    {
-        throw new System.NotImplementedException();
-    }
     #endregion
 }
