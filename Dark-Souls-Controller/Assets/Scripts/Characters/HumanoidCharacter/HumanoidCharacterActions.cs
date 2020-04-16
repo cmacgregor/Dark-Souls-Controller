@@ -3,7 +3,7 @@
 public class HumanoidCharacterActions : MonoBehaviour
 {
     //Class to control all visible actions a character can perform
-    Animator characterAnimator;
+    public Animator characterAnimator;
     Rigidbody characterRigidbody;
 
     public Vector3 movement;            //movement vector
