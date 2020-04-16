@@ -3,5 +3,5 @@
 public interface IActionController 
 {
     //Maybe not needed
-    void handleInputs();
+    void HandleInputs();
 }

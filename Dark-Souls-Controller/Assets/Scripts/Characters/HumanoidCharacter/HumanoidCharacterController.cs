@@ -169,7 +169,7 @@ public class HumanoidCharacterActionController : IActionController
 
     #endregion
 
-    public void handleInputs()
+    public void HandleInputs()
     {
         deriveActions();
         //handleLocomotion();
