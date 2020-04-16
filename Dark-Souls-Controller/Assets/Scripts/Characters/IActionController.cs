@@ -2,5 +2,6 @@
 
 public interface IActionController 
 {
-        void handleInputs(List<bool> currentInputs);
+    //Maybe not needed
+    void handleInputs();
 }
