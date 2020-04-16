@@ -65,6 +65,11 @@ public class HumanoidCharacterActions : MonoBehaviour
     private int stance_toggle_held_time = 0;
     private static int STANCE_TOGGLE_HOLD_TIME = 60;
 
+    void Start()
+    {
+        characterRigidbody = GetComponent<Rigidbody>();
+    }
+
     public void Move(Vector3 moveVector)
     {
         handleGroundedMovement(moveVector);
