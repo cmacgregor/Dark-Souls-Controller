@@ -5,6 +5,15 @@ using UnityEngine;
 public class OverworldCharacter : MonoBehaviour {
 
     public ICharacterController characterController;
-    public IAnimator animationTree;
     public IActionController actionController;
+
+    void Start()
+    {
+        
+    }
+
+    void Update()
+    {
+
+    }
 }
