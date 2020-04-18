@@ -3,5 +3,5 @@ using System.Collections.Generic;
 
 public interface ICharacterController
 {
-    void parseInputs();
+    void ParseInputs();
 }
