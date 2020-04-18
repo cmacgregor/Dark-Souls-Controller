@@ -1,0 +1,5 @@
+﻿
+abstract public class CharacterInputController
+{
+    
+}

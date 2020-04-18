@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-interface IHumanoidController : ICharacterController
+interface IHumanoidInputController : ICharacterInputController
 {
     Vector3 MovementVector { get; set; }
     float AxisHorizontal { get; set; }
