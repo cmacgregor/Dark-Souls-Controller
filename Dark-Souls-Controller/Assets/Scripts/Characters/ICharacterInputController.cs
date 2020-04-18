@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-public interface ICharacterInputController
+﻿
+public interface ICharacterInputController 
 {
     void ParseInputs();
 }

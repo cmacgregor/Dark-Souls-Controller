@@ -68,6 +68,7 @@ public class HumanoidCharacterActions : CharacterActions, ICharacterActions
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        characterAnimator = GetComponent<Animator>();
     }
 
     public void Move(Vector3 moveVector)
