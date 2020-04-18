@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-public class HumanoidCharacterActionController : MonoBehaviour, IActionController
+public class HumanoidCharacterActionController : ActionController, IActionController
  {
     //class to derive character actions from input controller
     IHumanoidInputController inputController; 
