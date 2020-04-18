@@ -67,7 +67,7 @@ public class HumanoidCharacterActions : CharacterActions, ICharacterActions
 
     void Start()
     {
-        characterController = GetComponent<Rigidbody>();
+        characterController = GetComponent<CharacterController>();
     }
 
     public void Move(Vector3 moveVector)
@@ -128,7 +128,7 @@ public class HumanoidCharacterActions : CharacterActions, ICharacterActions
         //Apply Character Weight Modifier to movement Vector 
         moveVector *= sprintSpeedMultiplier;
         moveVector *= Time.deltaTime;
-        characterController.MovePosition(moveVector);
+        characterController.Move(moveVector);
     }
 
     private void handleAirborneMovement()

@@ -1,5 +1,5 @@
 ﻿
-interface ILocalHumanoidInputController : IHumanoidController
+interface ILocalHumanoidInputController : IHumanoidInputController
 {
     bool DownItemCycle { get; set; }
     bool UpItemCycle { get; set; }

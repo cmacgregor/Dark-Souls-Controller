@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LocalHumanoidInputController : HumanoidController, ILocalHumanoidInputController
+public class LocalHumanoidInputController : HumanoidInputController, ILocalHumanoidInputController
 {
     //Class to derive humanoid character actions from local controller inputs 
 
