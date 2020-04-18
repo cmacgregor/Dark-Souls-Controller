@@ -4,7 +4,7 @@ using System;
 public class HumanoidCharacterActionController : MonoBehaviour, IActionController
  {
     //class to derive character actions from input controller
-    IHumanoidInputController inputController; 
+    IHumanoidController inputController; 
     HumanoidCharacterActions characterActions;
     //Player stats class
     //Player equippedItemsManager

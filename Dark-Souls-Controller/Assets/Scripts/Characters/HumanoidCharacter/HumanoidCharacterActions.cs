@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-public class HumanoidCharacterActions : MonoBehaviour
+public class HumanoidCharacterActions : CharacterActions, ICharacterActions
 {
     //Class to control all visible actions a character can perform
-    public Animator characterAnimator;
-    Rigidbody characterRigidbody;
+    Animator characterAnimator;
+    CharacterController characterController;
 
     public Vector3 movement;            //movement vector
     public bool interact;                //interact
@@ -67,7 +67,7 @@ public class HumanoidCharacterActions : MonoBehaviour
 
     void Start()
     {
-        characterRigidbody = GetComponent<Rigidbody>();
+        characterController = GetComponent<Rigidbody>();
     }
 
     public void Move(Vector3 moveVector)
@@ -108,9 +108,9 @@ public class HumanoidCharacterActions : MonoBehaviour
         {
             //rotate character based upon the current camera position
             transform.rotation =
-                Quaternion.Euler(characterRigidbody.transform.eulerAngles.x,
+                Quaternion.Euler(characterController.transform.eulerAngles.x,
                                  Camera.main.transform.eulerAngles.y,
-                                 characterRigidbody.transform.eulerAngles.z);
+                                 characterController.transform.eulerAngles.z);
         }
 
         moveVector = this.transform.TransformDirection(moveVector);
@@ -128,7 +128,7 @@ public class HumanoidCharacterActions : MonoBehaviour
         //Apply Character Weight Modifier to movement Vector 
         moveVector *= sprintSpeedMultiplier;
         moveVector *= Time.deltaTime;
-        characterRigidbody.MovePosition(moveVector);
+        characterController.MovePosition(moveVector);
     }
 
     private void handleAirborneMovement()

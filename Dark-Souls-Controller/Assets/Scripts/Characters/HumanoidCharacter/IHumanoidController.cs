@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-interface IHumanoidInputController
+interface IHumanoidController : ICharacterController
 {
     Vector3 MovementVector { get; set; }
     float AxisHorizontal { get; set; }
@@ -15,6 +15,4 @@ interface IHumanoidInputController
     bool Interact { get; set; }
     bool LeftSideItemCycle { get; set; }
     bool RightSideItemCycle { get; set; }
-
-    void ParseInputs();
 }

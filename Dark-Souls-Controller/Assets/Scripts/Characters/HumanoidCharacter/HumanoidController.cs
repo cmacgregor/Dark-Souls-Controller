@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class HumanoidInputController : IHumanoidInputController
+public class HumanoidController : IHumanoidController
 {
     Vector3 movementVector;
     float axisHorizontal;
