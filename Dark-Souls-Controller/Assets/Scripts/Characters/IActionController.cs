@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-
-public interface IActionController 
+﻿namespace characters
 {
-    void HandleInputs();
+    public interface IActionController
+    {
+        void HandleInputs();
+    }
 }

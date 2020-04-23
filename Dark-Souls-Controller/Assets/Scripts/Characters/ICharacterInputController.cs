@@ -1,5 +1,8 @@
 ﻿
-public interface ICharacterInputController 
+namespace characters
 {
-    void ParseInputs();
+    public interface ICharacterInputController
+    {
+        void ParseInputs();
+    }
 }

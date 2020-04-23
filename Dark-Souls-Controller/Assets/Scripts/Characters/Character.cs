@@ -1,26 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Character : MonoBehaviour, ICharacter 
+namespace characters
 {
-    private CharacterInputController inputController;
-    private ActionController actionController;
-    private CharacterActions characterActions;
-
-    public CharacterInputController InputController { get => inputController; set => inputController = value; }
-    public ActionController ActionController { get => actionController; set => actionController = value; }
-    public CharacterActions Actions { get => characterActions; set => characterActions = value; }
-
-    void Start()
+    public class Character : MonoBehaviour, ICharacter
     {
-        inputController = GetComponent<CharacterInputController>();
-        ActionController = GetComponent<ActionController>();
-        characterActions = GetComponent<CharacterActions>();
-    }
+        public virtual Character(CharacterInputController brain, CharacterActionController nervousSystem, CharacterActions body)
+        {
+            inputController = brain;
+            actionController = nervousSystem;
+            characterActions = body;
+        }
+        private CharacterInputController inputController;
+        private ActionController actionController;
+        private CharacterActions characterActions;
 
-    void Update()
-    {
+        public CharacterInputController InputController { get => inputController; set => inputController = value; }
+        public ActionController ActionController { get => actionController; set => actionController = value; }
+        public CharacterActions Actions { get => characterActions; set => characterActions = value; }
 
+        void Start()
+        {
+            inputController = GetComponent<CharacterInputController>();
+            ActionController = GetComponent<ActionController>();
+            characterActions = GetComponent<CharacterActions>();
+        }
+
+        void Update()
+        {
+
+        }
     }
 }

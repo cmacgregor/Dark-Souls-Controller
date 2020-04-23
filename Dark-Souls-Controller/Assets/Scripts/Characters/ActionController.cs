@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 
-//remove monobehaviour inheritence after spawn manager is created and can set the controller at creation time
-abstract public class ActionController : MonoBehaviour
+namespace characters
 {
+    //remove monobehaviour inheritence after spawn manager is created and can set the controller at creation time
+    abstract public class ActionController : MonoBehaviour
+    {
 
+    }
 }

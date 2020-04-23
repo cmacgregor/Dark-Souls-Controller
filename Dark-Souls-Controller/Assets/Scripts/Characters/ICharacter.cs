@@ -1,7 +1,10 @@
 ﻿
-interface ICharacter
+namespace characters
 {
-    CharacterInputController InputController { get; set; }
-    ActionController ActionController { get; set; }
-    CharacterActions Actions { get; set; }
+    interface ICharacter
+    {
+        CharacterInputController InputController { get; set; }
+        ActionController ActionController { get; set; }
+        CharacterActions Actions { get; set; }
+    }
 }
