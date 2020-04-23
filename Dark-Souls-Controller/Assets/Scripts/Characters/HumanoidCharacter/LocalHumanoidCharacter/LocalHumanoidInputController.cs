@@ -15,11 +15,11 @@ namespace Characters.HumanoidCharacter.LocalHumanoidInputController
         private bool mainMenu;
         private bool toggleTargetCamera;
 
-        public bool DownItemCycle { get => downItemCycle; set => throw new System.NotImplementedException(); }
-        public bool UpItemCycle { get => upItemCycle; set => throw new System.NotImplementedException(); }
-        public bool GestureMenu { get => gestureMenu; set => throw new System.NotImplementedException(); }
-        public bool MainMenu { get => mainMenu; set => throw new System.NotImplementedException(); }
-        public bool ToggleTargetCamera { get => toggleTargetCamera; set => throw new System.NotImplementedException(); }
+        public bool DownItemCycle { get => downItemCycle; }
+        public bool UpItemCycle { get => upItemCycle; }
+        public bool GestureMenu { get => gestureMenu; }
+        public bool MainMenu { get => mainMenu; }
+        public bool ToggleTargetCamera { get => toggleTargetCamera; }
 
         public override void ParseInputs()
         {

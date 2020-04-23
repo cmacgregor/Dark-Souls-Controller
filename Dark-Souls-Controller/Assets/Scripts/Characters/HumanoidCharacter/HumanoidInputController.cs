@@ -18,19 +18,19 @@ namespace Characters.HumanoidCharacter
         bool leftSideItemCycle;
         bool rightSideItemCycle;
 
-        public Vector3 MovementVector { get => movementVector; set => movementVector = value; }
-        public float AxisHorizontal { get => axisHorizontal; set => throw new System.NotImplementedException(); }
-        public float AxisVertical { get => axisVertical; set => throw new System.NotImplementedException(); }
-        public bool LeftLightAction { get => leftLightAction; set => throw new System.NotImplementedException(); }
-        public bool LeftHeavyAction { get => leftHeavyAction; set => throw new System.NotImplementedException(); }
-        public bool RightLightAction { get => rightLightAction; set => throw new System.NotImplementedException(); }
-        public bool RightHeavyAction { get => rightHeavyAction; set => throw new System.NotImplementedException(); }
-        public bool ToggleTwoHanded { get => toggleTwoHanded; set => throw new System.NotImplementedException(); }
-        public bool UseItem { get => useItem; set => throw new System.NotImplementedException(); }
-        public bool Dodge { get => dodge; set => throw new System.NotImplementedException(); }
-        public bool Interact { get => interact; set => throw new System.NotImplementedException(); }
-        public bool LeftSideItemCycle { get => leftSideItemCycle; set => throw new System.NotImplementedException(); }
-        public bool RightSideItemCycle { get => rightSideItemCycle; set => throw new System.NotImplementedException(); }
+        public Vector3 MovementVector { get => movementVector; }
+        public float AxisHorizontal { get => axisHorizontal; }
+        public float AxisVertical { get => axisVertical; }
+        public bool LeftLightAction { get => leftLightAction; }
+        public bool LeftHeavyAction { get => leftHeavyAction; }
+        public bool RightLightAction { get => rightLightAction; }
+        public bool RightHeavyAction { get => rightHeavyAction; }
+        public bool ToggleTwoHanded { get => toggleTwoHanded; }
+        public bool UseItem { get => useItem; }
+        public bool Dodge { get => dodge; }
+        public bool Interact { get => interact; }
+        public bool LeftSideItemCycle { get => leftSideItemCycle; }
+        public bool RightSideItemCycle { get => rightSideItemCycle; }
 
         public virtual void ParseInputs()
         {
