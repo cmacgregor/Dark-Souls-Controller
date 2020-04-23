@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace characters
+namespace Characters
 {
     abstract public class CharacterActions : MonoBehaviour
     {

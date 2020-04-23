@@ -1,4 +1,4 @@
-﻿namespace characters
+﻿namespace Characters
 {
     public interface IActionController
     {

@@ -1,18 +1,21 @@
 ﻿using UnityEngine;
 
-namespace characters
+namespace Characters
 {
     public class Character : MonoBehaviour, ICharacter
     {
+        private CharacterInputController inputController;
+        private ActionController actionController;
+        private CharacterActions characterActions;
+
+        //constructor
         public virtual Character(CharacterInputController brain, CharacterActionController nervousSystem, CharacterActions body)
         {
             inputController = brain;
             actionController = nervousSystem;
             characterActions = body;
         }
-        private CharacterInputController inputController;
-        private ActionController actionController;
-        private CharacterActions characterActions;
+
 
         public CharacterInputController InputController { get => inputController; set => inputController = value; }
         public ActionController ActionController { get => actionController; set => actionController = value; }
