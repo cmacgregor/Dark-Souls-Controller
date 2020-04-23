@@ -1,6 +1,6 @@
 ﻿namespace Characters
 {
-    public interface IActionController
+    public interface ICharacterActionController
     {
         void HandleInputs();
     }

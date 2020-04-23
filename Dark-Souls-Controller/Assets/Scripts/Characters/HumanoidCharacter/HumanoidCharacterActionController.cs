@@ -3,7 +3,7 @@ using System;
 
 namespace Characters.HumanoidCharacter
 {
-    public class HumanoidCharacterActionController : ActionController, IActionController
+    public class HumanoidCharacterActionController : CharacterActionController, ICharacterActionController
     {
         //class to derive character actions from input controller
 
@@ -172,7 +172,7 @@ namespace Characters.HumanoidCharacter
 
         #endregion
 
-        public void HandleInputs()
+        override public void HandleInputs()
         {
             deriveActions();
             //handleLocomotion();
