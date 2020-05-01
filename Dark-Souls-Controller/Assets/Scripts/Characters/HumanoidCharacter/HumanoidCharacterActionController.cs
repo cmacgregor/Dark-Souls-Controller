@@ -1,312 +1,316 @@
 using UnityEngine;
 using System;
 
-public class HumanoidCharacterActionController : ActionController, IActionController
- {
-    //class to derive character actions from input controller
-    IHumanoidInputController inputController; 
-    HumanoidCharacterActions characterActions;
-    //Player stats class
-    //Player equippedItemsManager
-    //<type>	targeted_enemy; 
-
-    #region Needs to be moved to EquippedItemsManager class
-    //active equipment definitions 
-    public const int ITEM_SLOTS = 5;
-    public const int WEAPON_SLOTS = 3;
-    public const int SKILL_SLOTS = 3;
-    public const int ARMOR_SLOTS = 4;
-
-    //player equipment
-    private int[] equippedArmor = new int[ARMOR_SLOTS];
-    private int[] equippedItems = new int[ITEM_SLOTS];
-    private int[] equippedSkills = new int[SKILL_SLOTS];
-    private int[] equippedLeftSideWeapons = new int[WEAPON_SLOTS];
-    private int[] equippedRightSideWeapons = new int[WEAPON_SLOTS];
-
-    private ushort activeLeftWeaponSlot = 0;
-    private ushort activeRightWeaponSlot = 0;
-    private ushort activeReadyItemSlot = 0;
-    private ushort activeSkillSlot = 0;
-
-    #region Equipment Item Management Functions
-    public void cycleReadyItem()
+namespace Characters.HumanoidCharacter
+{
+    public class HumanoidCharacterActionController : CharacterActionController, ICharacterActionController
     {
-        activeReadyItemSlot = cycleEquipment(ref equippedItems, activeReadyItemSlot);
-    }
+        //class to derive character actions from input controller
 
-    public void cycleSkills()
-    {
-        activeSkillSlot = cycleEquipment(ref equippedSkills, activeSkillSlot);
-    }
+        HumanoidInputController inputController;
+        HumanoidCharacterActions characterActions;
+        //Player stats class
+        //Player equippedItemsManager
+        //<type>	targeted_enemy; 
 
-    public void cycleLeftWeapon()
-    {
-        activeLeftWeaponSlot = cycleWeapon(ref equippedLeftSideWeapons, ref activeLeftWeaponSlot);
-        //play weapon switch animation
-    }
+        #region Needs to be moved to EquippedItemsManager class
+        //active equipment definitions 
+        public const int ITEM_SLOTS = 5;
+        public const int WEAPON_SLOTS = 3;
+        public const int SKILL_SLOTS = 3;
+        public const int ARMOR_SLOTS = 4;
 
-    public void cycleRightWeapon()
-    {
-        activeRightWeaponSlot = cycleWeapon(ref equippedRightSideWeapons, ref activeRightWeaponSlot);
-        //play weapon switch animation
-    }
+        //player equipment
+        private int[] equippedArmor = new int[ARMOR_SLOTS];
+        private int[] equippedItems = new int[ITEM_SLOTS];
+        private int[] equippedSkills = new int[SKILL_SLOTS];
+        private int[] equippedLeftSideWeapons = new int[WEAPON_SLOTS];
+        private int[] equippedRightSideWeapons = new int[WEAPON_SLOTS];
 
-    private ushort cycleWeapon(ref int[] equippedWeapons, ref ushort currentWeaponSlot)
-    {
-        ushort newWeaponSlot = cycleEquipment(ref equippedWeapons, currentWeaponSlot);
+        private ushort activeLeftWeaponSlot = 0;
+        private ushort activeRightWeaponSlot = 0;
+        private ushort activeReadyItemSlot = 0;
+        private ushort activeSkillSlot = 0;
 
-        return newWeaponSlot;
-    }
-
-    private ushort cycleEquipment(ref int[] equipmentArr, ushort index)
-    {
-        if (index + 1 < equipmentArr.Length)
+        #region Equipment Item Management Functions
+        public void cycleReadyItem()
         {
-            index++;
-        }
-        else
-        {
-            index = 0;
+            activeReadyItemSlot = cycleEquipment(ref equippedItems, activeReadyItemSlot);
         }
 
-        return index;
-    }
-    #endregion
-
-    #region property getters and setters
-    public void SetEquippedItem(ushort item_Num, int item_Slot)
-    {
-        try
+        public void cycleSkills()
         {
-            equippedItems[item_Slot] = item_Num;
+            activeSkillSlot = cycleEquipment(ref equippedSkills, activeSkillSlot);
         }
-        catch (Exception e)
+
+        public void cycleLeftWeapon()
         {
-            Debug.LogException(e);
+            activeLeftWeaponSlot = cycleWeapon(ref equippedLeftSideWeapons, ref activeLeftWeaponSlot);
+            //play weapon switch animation
         }
-    }
 
-    public void SetEquippedSkill(ushort equipment_Num, int equipment_Slot)
-    {
-        try
+        public void cycleRightWeapon()
         {
-            equippedSkills[equipment_Slot] = equipment_Num;
+            activeRightWeaponSlot = cycleWeapon(ref equippedRightSideWeapons, ref activeRightWeaponSlot);
+            //play weapon switch animation
         }
-        catch (Exception e)
+
+        private ushort cycleWeapon(ref int[] equippedWeapons, ref ushort currentWeaponSlot)
         {
-            Debug.LogException(e);
+            ushort newWeaponSlot = cycleEquipment(ref equippedWeapons, currentWeaponSlot);
+
+            return newWeaponSlot;
         }
-    }
 
-    public void SetEquippedLeftWeapon(ushort skill_Num, int skill_Slot)
-    {
-        try
+        private ushort cycleEquipment(ref int[] equipmentArr, ushort index)
         {
-            equippedSkills[skill_Slot] = skill_Num;
-        }
-        catch (Exception e)
-        {
-            Debug.LogException(e);
-        }
-    }
+            if (index + 1 < equipmentArr.Length)
+            {
+                index++;
+            }
+            else
+            {
+                index = 0;
+            }
 
-    public void SetEquippedRightWeapon(ushort skill_Num, int skill_Slot)
-    {
-        try
-        {
-            equippedSkills[skill_Slot] = skill_Num;
-        }
-        catch (Exception e)
-        {
-            Debug.LogException(e);
-        }
-    }
-
-    public void SetEquippedArmor(ushort armor_Num, int armor_Slot)
-    {
-        try
-        {
-            equippedSkills[armor_Slot] = armor_Num;
-        }
-        catch (Exception e)
-        {
-            Debug.LogException(e);
-        }
-    }
-
-    public int getItemAtSlot(int slot_Num)
-    {
-        return equippedItems[slot_Num];
-    }
-
-    public int getArmorAtSlot(int slot_Num)
-    {
-        return equippedArmor[slot_Num];
-    }
-
-    public int getSkillAtSlot(int slot_Num)
-    {
-        return equippedSkills[slot_Num];
-    }
-
-    public int getLeftWeaponAtSlot(int slot_Num)
-    {
-        return equippedLeftSideWeapons[slot_Num];
-    }
-
-    public int getRightWeaponAtSlot(int slot_Num)
-    {
-        return equippedRightSideWeapons[slot_Num];
-    }
-
-    public int getMaxItems()
-    {
-        return ITEM_SLOTS;
-    }
-
-    #endregion
-
-    #endregion
-
-    public void HandleInputs()
-    {
-        deriveActions();
-        //handleLocomotion();
-    }
-
-    //Needs to be moved to inheritied class for local player
-    //private void handleMenus()
-    //{
-    //    if (input_mainMenu)
-    //    {
-    //        Debug.Log("input_menu");
-    //    }
-    //    else if (input_secondaryMenu)
-    //    {
-    //        Debug.Log("input_secondaryMenu");
-    //    }
-    //}
-
-    private void deriveActions()
-    {
-        #region Handle Equipement Cycling
-        if (inputController.LeftSideItemCycle)
-        {
-            //playerCharacter.cycleLeftWeapon();
-        }
-        else if (inputController.RightSideItemCycle)
-        {
-            //playerCharacter.cycleRightWeapon();
+            return index;
         }
         #endregion
 
-        #region Handle Non-menu actions
-
-        #region Handle weapon actions
-
-        #region Light actions
-        //Light action right
-        if (inputController.RightLightAction)
+        #region property getters and setters
+        public void SetEquippedItem(ushort item_Num, int item_Slot)
         {
-            //Kick
-            //if (movement_Vector.magnitude < ANALOG_DEAD_ZONE)
-            //{
-            //    playerCharacter.rightSideAction(1);
-            //}
-            //else
-            //{
-            //    playerCharacter.rightSideAction(0);
-            //}
+            try
+            {
+                equippedItems[item_Slot] = item_Num;
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
 
-        //Light action Left
-        if (inputController.LeftLightAction)
+        public void SetEquippedSkill(ushort equipment_Num, int equipment_Slot)
         {
-            //playerCharacter.leftSideAction(0);
+            try
+            {
+                equippedSkills[equipment_Slot] = equipment_Num;
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
-        #endregion
 
-        #region Heavy Actions
-        //Heavy Hold Right
-        //if (Input.GetButton ("Right Hand Heavy Action")) {
-        //	player_character.rightSideAction(2);
-        //}
-        //Heavy Hold left
-        //if (Input.GetButton ("Left Hand Heavy Action")) {
-        //	player_character.leftSideAction(2);
-        //}
-        // -Heavy action Right
-        if (inputController.RightHeavyAction)
+        public void SetEquippedLeftWeapon(ushort skill_Num, int skill_Slot)
         {
-            //lunge attack 
-            //if (Input.GetButton("Right Hand Heavy Action") && movement_Vector.magnitude < ANALOG_DEAD_ZONE)
-            //{
-            //    playerCharacter.rightSideAction(4);
-            //}
-            //else
-            //{
-            //    playerCharacter.rightSideAction(3);
-            //}
+            try
+            {
+                equippedSkills[skill_Slot] = skill_Num;
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
-        // -Heavy action Left 
-        if (inputController.LeftHeavyAction)
+
+        public void SetEquippedRightWeapon(ushort skill_Num, int skill_Slot)
         {
-            //playerCharacter.leftSideAction(3);
+            try
+            {
+                equippedSkills[skill_Slot] = skill_Num;
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
+
+        public void SetEquippedArmor(ushort armor_Num, int armor_Slot)
+        {
+            try
+            {
+                equippedSkills[armor_Slot] = armor_Num;
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+        }
+
+        public int getItemAtSlot(int slot_Num)
+        {
+            return equippedItems[slot_Num];
+        }
+
+        public int getArmorAtSlot(int slot_Num)
+        {
+            return equippedArmor[slot_Num];
+        }
+
+        public int getSkillAtSlot(int slot_Num)
+        {
+            return equippedSkills[slot_Num];
+        }
+
+        public int getLeftWeaponAtSlot(int slot_Num)
+        {
+            return equippedLeftSideWeapons[slot_Num];
+        }
+
+        public int getRightWeaponAtSlot(int slot_Num)
+        {
+            return equippedRightSideWeapons[slot_Num];
+        }
+
+        public int getMaxItems()
+        {
+            return ITEM_SLOTS;
+        }
+
         #endregion
 
         #endregion
 
-        #region handle two handed stance changes 
-        //check if weapon toggle button has been pressed
-        //if (Input.GetButton("Two-handed Toggle"))
+        override public void HandleInputs()
+        {
+            deriveActions();
+            //handleLocomotion();
+        }
+
+        //Needs to be moved to inheritied class for local player
+        //private void handleMenus()
         //{
-        //    stance_toggle_held_time++;
-        //}
-        ////if weapon toggle button has been released
-        //if (input_toggleTwoHanded)
-        //{
-        //    if (playerCharacter.getWeaponStance() == HumanoidCharacterClass.HumanoidCharacter.weapon_Stance.SingleHanded)
+        //    if (input_mainMenu)
         //    {
-        //        //if held down two hand left hand 
-        //        if (stance_toggle_held_time > STANCE_TOGGLE_HOLD_TIME)
-        //        {
-        //            playerCharacter.setWeaponStance(HumanoidCharacterClass.HumanoidCharacter.weapon_Stance.LeftHandedTwoHand);
-        //        }
-        //        //else two hand right hand weapon
-        //        else
-        //        {
-        //            playerCharacter.setWeaponStance(HumanoidCharacterClass.HumanoidCharacter.weapon_Stance.RightHandedTwoHand);
-        //        }
+        //        Debug.Log("input_menu");
         //    }
-        //    else
+        //    else if (input_secondaryMenu)
         //    {
-        //        playerCharacter.setWeaponStance(HumanoidCharacterClass.HumanoidCharacter.weapon_Stance.SingleHanded);
+        //        Debug.Log("input_secondaryMenu");
         //    }
-        //    stance_toggle_held_time = 0;
         //}
-        #endregion
 
-        // -Dodge
-        if (inputController.Dodge)
+        private void deriveActions()
         {
-            //If Stamina allows
-            characterActions.Dodge();
-        }
+            #region Handle Equipement Cycling
+            if (inputController.LeftSideItemCycle)
+            {
+                //playerCharacter.cycleLeftWeapon();
+            }
+            else if (inputController.RightSideItemCycle)
+            {
+                //playerCharacter.cycleRightWeapon();
+            }
+            #endregion
 
-        // -Interact 
-        if (inputController.Interact)
-        {
-            //playerCharacter.interact();
-        }
+            #region Handle Non-menu actions
 
-        // -Use Item
-        if (inputController.UseItem)
-        {
-            characterActions.UseItem();
-            //playerCharacter.useItem();
+            #region Handle weapon actions
+
+            #region Light actions
+            //Light action right
+            if (inputController.RightLightAction)
+            {
+                //Kick
+                //if (movement_Vector.magnitude < ANALOG_DEAD_ZONE)
+                //{
+                //    playerCharacter.rightSideAction(1);
+                //}
+                //else
+                //{
+                //    playerCharacter.rightSideAction(0);
+                //}
+            }
+
+            //Light action Left
+            if (inputController.LeftLightAction)
+            {
+                //playerCharacter.leftSideAction(0);
+            }
+            #endregion
+
+            #region Heavy Actions
+            //Heavy Hold Right
+            //if (Input.GetButton ("Right Hand Heavy Action")) {
+            //	player_character.rightSideAction(2);
+            //}
+            //Heavy Hold left
+            //if (Input.GetButton ("Left Hand Heavy Action")) {
+            //	player_character.leftSideAction(2);
+            //}
+            // -Heavy action Right
+            if (inputController.RightHeavyAction)
+            {
+                //lunge attack 
+                //if (Input.GetButton("Right Hand Heavy Action") && movement_Vector.magnitude < ANALOG_DEAD_ZONE)
+                //{
+                //    playerCharacter.rightSideAction(4);
+                //}
+                //else
+                //{
+                //    playerCharacter.rightSideAction(3);
+                //}
+            }
+            // -Heavy action Left 
+            if (inputController.LeftHeavyAction)
+            {
+                //playerCharacter.leftSideAction(3);
+            }
+            #endregion
+
+            #endregion
+
+            #region handle two handed stance changes 
+            //check if weapon toggle button has been pressed
+            //if (Input.GetButton("Two-handed Toggle"))
+            //{
+            //    stance_toggle_held_time++;
+            //}
+            ////if weapon toggle button has been released
+            //if (input_toggleTwoHanded)
+            //{
+            //    if (playerCharacter.getWeaponStance() == HumanoidCharacterClass.HumanoidCharacter.weapon_Stance.SingleHanded)
+            //    {
+            //        //if held down two hand left hand 
+            //        if (stance_toggle_held_time > STANCE_TOGGLE_HOLD_TIME)
+            //        {
+            //            playerCharacter.setWeaponStance(HumanoidCharacterClass.HumanoidCharacter.weapon_Stance.LeftHandedTwoHand);
+            //        }
+            //        //else two hand right hand weapon
+            //        else
+            //        {
+            //            playerCharacter.setWeaponStance(HumanoidCharacterClass.HumanoidCharacter.weapon_Stance.RightHandedTwoHand);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        playerCharacter.setWeaponStance(HumanoidCharacterClass.HumanoidCharacter.weapon_Stance.SingleHanded);
+            //    }
+            //    stance_toggle_held_time = 0;
+            //}
+            #endregion
+
+            // -Dodge
+            if (inputController.Dodge)
+            {
+                //If Stamina allows
+                characterActions.Dodge();
+            }
+
+            // -Interact 
+            if (inputController.Interact)
+            {
+                //playerCharacter.interact();
+            }
+
+            // -Use Item
+            if (inputController.UseItem)
+            {
+                characterActions.UseItem();
+                //playerCharacter.useItem();
+            }
+            #endregion
         }
-        #endregion
     }
 }

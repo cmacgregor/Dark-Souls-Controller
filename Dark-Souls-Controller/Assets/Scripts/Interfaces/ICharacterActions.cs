@@ -1,0 +1,8 @@
+﻿
+namespace Characters
+{
+    interface ICharacterActions
+    {
+
+    }
+}
