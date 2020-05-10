@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Specialized;
 
 namespace Characters.HumanoidCharacter
 {
@@ -9,6 +10,11 @@ namespace Characters.HumanoidCharacter
 
         HumanoidInputController inputController;
         HumanoidCharacterActions characterActions;
+
+        Vector3 movementVector;
+
+        private float interactionRadius = 1.0f;
+
         //Player stats class
         //Player equippedItemsManager
         //<type>	targeted_enemy; 
@@ -175,7 +181,17 @@ namespace Characters.HumanoidCharacter
         override public void HandleInputs()
         {
             deriveActions();
-            //handleLocomotion();
+            handleLocomotion();
+        }
+
+        public override void SetInputController(CharacterInputController brain)
+        {
+            inputController = brain as HumanoidInputController;
+        }
+
+        public override void SetCharacterActions(CharacterActions body)
+        {
+            characterActions = body as HumanoidCharacterActions;
         }
 
         //Needs to be moved to inheritied class for local player
@@ -196,11 +212,11 @@ namespace Characters.HumanoidCharacter
             #region Handle Equipement Cycling
             if (inputController.LeftSideItemCycle)
             {
-                //playerCharacter.cycleLeftWeapon();
+                characterActions.cycleLeftSideItem();
             }
             else if (inputController.RightSideItemCycle)
             {
-                //playerCharacter.cycleRightWeapon();
+                characterActions.cycleRightSideItem();
             }
             #endregion
 
@@ -311,6 +327,38 @@ namespace Characters.HumanoidCharacter
                 //playerCharacter.useItem();
             }
             #endregion
+        }
+
+        public void handleLocomotion()
+        {
+            movementVector = new Vector3(inputController.AxisHorizontal, 0, inputController.AxisVertical);
+
+            //derive movement vector from camera direction
+            if (movementVector.magnitude > 1) movementVector = Vector3.Normalize(movementVector);
+            if (movementVector.x != 0 || movementVector.z != 0)
+            {
+                //rotate character based upon the current camera position
+                characterActions.CharacterController.transform.rotation =
+                    Quaternion.Euler(characterActions.CharacterController.transform.eulerAngles.x,
+                                     Camera.main.transform.eulerAngles.y,
+                                     characterActions.CharacterController.transform.eulerAngles.z);
+            }
+            characterActions.Move(movementVector);
+        }
+
+        public bool checkForInteraction()
+        {
+            bool interactableObjectFound = false;
+
+            RaycastHit hitObject;
+            //Check for interactable objects 
+            if (Physics.SphereCast(characterActions.CharacterController.transform.position, interactionRadius, characterActions.CharacterController.transform.forward,
+                out hitObject, interactionRadius, LayerMask.GetMask("Interactable"), QueryTriggerInteraction.Collide))
+            {
+                //display prompt
+                interactableObjectFound = true;
+            }
+            return interactableObjectFound;
         }
     }
 }

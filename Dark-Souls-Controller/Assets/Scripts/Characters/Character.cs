@@ -1,12 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Characters
 {
     public class Character : MonoBehaviour, ICharacter
     {
-        private CharacterInputController inputController;
-        private CharacterActionController actionController;
-        private CharacterActions characterActions;
+        public CharacterInputController inputController;
+        public CharacterActionController actionController;
+        public CharacterActions characterActions;
 
         //constructor
         public Character(CharacterInputController brain, CharacterActionController nervousSystem, CharacterActions body)
@@ -26,11 +27,17 @@ namespace Characters
             inputController = GetComponent<CharacterInputController>();
             actionController = GetComponent<CharacterActionController>();
             characterActions = GetComponent<CharacterActions>();
+
+            //setup dependencies for action controller
+            actionController.SetInputController(inputController);
+            actionController.SetCharacterActions(characterActions);
+
         }
 
         void Update()
         {
-
+            inputController.ParseInputs();
+            actionController.HandleInputs();
         }
     }
 }

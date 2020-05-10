@@ -4,7 +4,6 @@ namespace Characters.HumanoidCharacter
 {
     public class HumanoidInputController : CharacterInputController, IHumanoidInputController
     {
-        Vector3 movementVector;
         float axisHorizontal;
         float axisVertical;
         bool leftLightAction;
@@ -18,7 +17,6 @@ namespace Characters.HumanoidCharacter
         bool leftSideItemCycle;
         bool rightSideItemCycle;
 
-        public Vector3 MovementVector { get => movementVector; }
         public float AxisHorizontal { get => axisHorizontal; }
         public float AxisVertical { get => axisVertical; }
         public bool LeftLightAction { get => leftLightAction; }
@@ -32,23 +30,23 @@ namespace Characters.HumanoidCharacter
         public bool LeftSideItemCycle { get => leftSideItemCycle; }
         public bool RightSideItemCycle { get => rightSideItemCycle; }
 
-        public virtual void ParseInputs()
+        public override void ParseInputs()
         {
             //analog sticks
-            axisHorizontal = Input.GetAxis("LeftStickX");
-            axisVertical = Input.GetAxis("LeftStickY");
+            axisHorizontal = Input.GetAxis("HorizontalMovement");
+            axisVertical = Input.GetAxis("VerticalMovement");
             //shoulder buttons
-            leftLightAction = Input.GetButtonDown("L1");
-            leftHeavyAction = Input.GetButtonUp("L2");
-            rightLightAction = Input.GetButtonDown("R1");
-            rightHeavyAction = Input.GetButtonUp("R2");
+            leftLightAction = Input.GetButtonDown("LeftLightAction");
+            leftHeavyAction = Input.GetButtonDown("LeftHeavyAction");
+            rightLightAction = Input.GetButtonDown("RightLightAction");
+            rightHeavyAction = Input.GetButtonDown("RightHeavyAction");
             //face buttons
-            toggleTwoHanded = Input.GetButtonUp("TopButton");
-            useItem = Input.GetButtonDown("RightButton");
-            dodge = Input.GetButtonDown("LeftButton");
-            interact = Input.GetButtonDown("ButtomButton");
-            leftSideItemCycle = Input.GetButtonDown("DPadLeft");
-            rightSideItemCycle = Input.GetButtonDown("DPadRight");
+            toggleTwoHanded = Input.GetButtonDown("ToggleTwoHanded");
+            useItem = Input.GetButtonDown("UseItem");
+            dodge = Input.GetButtonDown("Dodge");
+            interact = Input.GetButtonDown("Interact");
+            leftSideItemCycle = Input.GetButtonDown("LeftSideItemCycle");
+            rightSideItemCycle = Input.GetButtonDown("RightSideItemCycle");
         }
     }
 }

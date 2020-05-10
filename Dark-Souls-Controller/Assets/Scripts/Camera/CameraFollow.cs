@@ -27,8 +27,8 @@ public class CameraFollow : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		x_current += Input.GetAxis ("Mouse X") * x_sensitivity;
-		y_current += Input.GetAxis ("Mouse Y") * y_sensitivity;
+		x_current += Input.GetAxis ("CameraX") * x_sensitivity;
+		y_current += Input.GetAxis ("CameraY") * y_sensitivity;
 
 		y_current = Mathf.Clamp (y_current, Y_ANGLE_MIN, Y_ANGLE_MAX);
 	}

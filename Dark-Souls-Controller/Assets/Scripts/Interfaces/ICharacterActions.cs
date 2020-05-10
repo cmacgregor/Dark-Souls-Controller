@@ -1,7 +1,7 @@
 ﻿
 namespace Characters
 {
-    interface ICharacterActions
+    public interface ICharacterActions
     {
 
     }

@@ -8,21 +8,21 @@ namespace Characters.HumanoidCharacter
         Animator characterAnimator;
         CharacterController characterController;
 
-        public Vector3 movement;            //movement vector
-        public bool interact;                //interact
-        public bool dodge;                   //dodge 
-        public bool useItem;                 //use selected item
-        public bool toggleTwoHanded;         //toggle hands on weapon
+        //public Vector3 movement;            //movement vector
+        //public bool interact;                //interact
+        //public bool dodge;                   //dodge 
+        //public bool useItem;                 //use selected item
+        //public bool toggleTwoHanded;         //toggle hands on weapon
 
-        public bool downItemCycle;           //direction pad down
-        public bool upItemCycle;             //direction pad up
+        //public bool downItemCycle;           //direction pad down
+        //public bool upItemCycle;             //direction pad up
 
-        public bool leftLightAction;         //left handed light attack
-        public bool leftHeavyAction;         //left handed heavy attack
-        public bool rightLightAction;        //right handed light attack
-        public bool rightHeavyAction;        //right handed heavy attack
-        public bool leftSideItemCycle;       //direction pad left
-        public bool rightSideItemCycle;      //direction pad right
+        //public bool leftLightAction;         //left handed light attack
+        //public bool leftHeavyAction;         //left handed heavy attack
+        //public bool rightLightAction;        //right handed light attack
+        //public bool rightHeavyAction;        //right handed heavy attack
+        //public bool leftSideItemCycle;       //direction pad left
+        //public bool rightSideItemCycle;      //direction pad right
 
         //local player only actions inputs
         //public bool gestureMenu;             //open gestures menu
@@ -61,11 +61,11 @@ namespace Characters.HumanoidCharacter
         //Movement calculation variables 
         Vector3 movement_Vector;
 
-        private float interactionRadius = 1.0f;
-
         //Weapon Toggle variables
         private int stance_toggle_held_time = 0;
         private static int STANCE_TOGGLE_HOLD_TIME = 60;
+
+        public CharacterController CharacterController { get => characterController; set => characterController = value; }
 
         void Start()
         {
@@ -75,7 +75,28 @@ namespace Characters.HumanoidCharacter
 
         public void Move(Vector3 moveVector)
         {
-            handleGroundedMovement(moveVector);
+            //check if grounded
+            if(characterController.isGrounded)
+            {
+                //tell animator we're grounded
+                characterAnimator.SetBool("Falling", false);
+                handleGroundedMovement(moveVector);
+            }
+            else
+            {
+                //characterAnimator.SetBool("Falling", true);
+                handleAirborneMovement();
+            }
+        }
+
+        public void cycleRightSideItem()
+        {
+            characterAnimator.SetTrigger("CycleRightSideItem");
+        }
+
+        public void cycleLeftSideItem()
+        {
+            characterAnimator.SetTrigger("CycleLeftSideItem");
         }
 
         public void UseItem()
@@ -104,8 +125,26 @@ namespace Characters.HumanoidCharacter
 
         private void handleGroundedMovement(Vector3 moveVector)
         {
-            //tell animator we're not falling
-            characterAnimator.SetBool("Falling", false);
+            moveVector = this.transform.TransformDirection(moveVector);
+
+            characterAnimator.SetFloat("Locomotion", moveVector.magnitude, 0f, Time.deltaTime);
+            if (moveVector.x != 0 || moveVector.z != 0)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation,
+                Quaternion.LookRotation(moveVector), 500f);
+            }
+            if (sprinting)
+            {
+                moveVector *= sprintSpeed;
+            }
+            //Apply Character Weight Modifier to movement Vector 
+            moveVector *= sprintSpeedMultiplier;
+            moveVector *= Time.deltaTime;
+            //characterController.Move(moveVector);
+        }
+
+        private void OLD_handleGroundedMovement(Vector3 moveVector)
+        {
             if (moveVector.magnitude > 1) moveVector = Vector3.Normalize(moveVector);
             if (moveVector.x != 0 || moveVector.z != 0)
             {
@@ -118,7 +157,7 @@ namespace Characters.HumanoidCharacter
 
             moveVector = this.transform.TransformDirection(moveVector);
 
-            characterAnimator.SetFloat("Forward", moveVector.magnitude, 0f, Time.deltaTime);
+            characterAnimator.SetFloat("Locomotion", moveVector.magnitude, 0f, Time.deltaTime);
             if (moveVector.x != 0 || moveVector.z != 0)
             {
                 transform.rotation = Quaternion.Slerp(transform.rotation,
@@ -136,22 +175,7 @@ namespace Characters.HumanoidCharacter
 
         private void handleAirborneMovement()
         {
-            characterAnimator.SetBool("Falling", true);
-            //characterController.Move(new Vector3(0, -Gravity, 0) * Time.deltaTime);
-        }
-
-        public void checkForInteraction()
-        {
-            RaycastHit hitObject;
-            //Check for interactable objects 
-            //Physics.SphereCast();
-
-            //check for targetable objects
-            if (Physics.SphereCast(this.transform.position, interactionRadius, this.transform.forward,
-                out hitObject, interactionRadius, LayerMask.GetMask("Interactable"), QueryTriggerInteraction.Collide))
-            {
-                //display prompt
-            }
+            characterController.Move(new Vector3(0, -Gravity, 0) * Time.deltaTime);
         }
     }
 }

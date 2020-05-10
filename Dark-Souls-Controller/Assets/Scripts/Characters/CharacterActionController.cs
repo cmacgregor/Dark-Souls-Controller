@@ -6,5 +6,9 @@ namespace Characters
     abstract public class CharacterActionController : MonoBehaviour, ICharacterActionController
     {
         abstract public void HandleInputs();
+
+        abstract public void SetInputController(CharacterInputController brain);
+
+        abstract public void SetCharacterActions(CharacterActions body);
     }
 }

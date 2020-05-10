@@ -9,14 +9,14 @@ namespace Characters.HumanoidCharacter.LocalHumanoidInputController
 
         public float ANALOG_DEAD_ZONE = 0.1f;
 
-        private bool downItemCycle;
-        private bool upItemCycle;
+        private bool usableItemCycle;
+        private bool skillCycle;
         private bool gestureMenu;
         private bool mainMenu;
         private bool toggleTargetCamera;
 
-        public bool DownItemCycle { get => downItemCycle; }
-        public bool UpItemCycle { get => upItemCycle; }
+        public bool DownItemCycle { get => usableItemCycle; }
+        public bool UpItemCycle { get => skillCycle; }
         public bool GestureMenu { get => gestureMenu; }
         public bool MainMenu { get => mainMenu; }
         public bool ToggleTargetCamera { get => toggleTargetCamera; }
@@ -25,13 +25,13 @@ namespace Characters.HumanoidCharacter.LocalHumanoidInputController
         {
             base.ParseInputs();
             //analog sticks
-            toggleTargetCamera = Input.GetButtonDown("R3");
+            toggleTargetCamera = Input.GetButtonDown("ToggleTargetCamera");
             //face buttons
-            downItemCycle = Input.GetButtonDown("DPadUp");
-            upItemCycle = Input.GetButtonDown("DPadDown");
+            usableItemCycle = Input.GetButtonDown("UsableItemCycle");
+            skillCycle = Input.GetButtonDown("SkillCycle");
             //menus
-            gestureMenu = Input.GetButtonDown("Select");
-            mainMenu = Input.GetButtonDown("Start");
+            gestureMenu = Input.GetButtonDown("GestureMenu");
+            mainMenu = Input.GetButtonDown("MainMenu");
         }
     }
 }

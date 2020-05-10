@@ -4,7 +4,6 @@ namespace Characters.HumanoidCharacter
 {
     interface IHumanoidInputController : ICharacterInputController
     {
-        Vector3 MovementVector { get; }
         float AxisHorizontal { get; }
         float AxisVertical { get; }
         bool LeftLightAction { get; }
