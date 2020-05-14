@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections.Specialized;
 
 namespace Characters.HumanoidCharacter
 {
@@ -11,7 +10,7 @@ namespace Characters.HumanoidCharacter
         HumanoidInputController inputController;
         HumanoidCharacterActions characterActions;
 
-        Vector3 movementVector;
+        Vector3 inputVector;
 
         private float interactionRadius = 1.0f;
 
@@ -331,19 +330,18 @@ namespace Characters.HumanoidCharacter
 
         public void handleLocomotion()
         {
-            movementVector = new Vector3(inputController.AxisHorizontal, 0, inputController.AxisVertical);
+            characterActions.SetMove = false;
+
+            inputVector = new Vector3(inputController.AxisHorizontal, 0, inputController.AxisVertical);
+            if (inputVector.magnitude > 1) inputVector = Vector3.Normalize(inputVector);
 
             //derive movement vector from camera direction
-            if (movementVector.magnitude > 1) movementVector = Vector3.Normalize(movementVector);
-            if (movementVector.x != 0 || movementVector.z != 0)
+            if (inputVector.x != 0 || inputVector.z != 0)
             {
-                //rotate character based upon the current camera position
-                characterActions.CharacterController.transform.rotation =
-                    Quaternion.Euler(characterActions.CharacterController.transform.eulerAngles.x,
-                                     Camera.main.transform.eulerAngles.y,
-                                     characterActions.CharacterController.transform.eulerAngles.z);
+                //Tell Body to move
+                characterActions.SetMove = true;
+                characterActions.MovementDirection = inputVector;
             }
-            characterActions.Move(movementVector);
         }
 
         public bool checkForInteraction()

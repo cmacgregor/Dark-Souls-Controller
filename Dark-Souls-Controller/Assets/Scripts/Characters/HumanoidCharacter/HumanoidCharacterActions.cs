@@ -32,6 +32,9 @@ namespace Characters.HumanoidCharacter
         //public bool toggleTargetCamera;      //reset camera
 
         //Character movement variables 
+        public bool SetMove = false;
+        public Vector3 MovementDirection;
+
         private bool sprinting = false;
         public float sprintSpeed = 4.0f;
         public float sprintSpeedMultiplier = 2.0f;
@@ -58,9 +61,6 @@ namespace Characters.HumanoidCharacter
             Lunge
         };
 
-        //Movement calculation variables 
-        Vector3 movement_Vector;
-
         //Weapon Toggle variables
         private int stance_toggle_held_time = 0;
         private static int STANCE_TOGGLE_HOLD_TIME = 60;
@@ -73,18 +73,39 @@ namespace Characters.HumanoidCharacter
             characterAnimator = GetComponent<Animator>();
         }
 
+        void Update()
+        {
+            characterAnimator.SetBool("Moving", SetMove);
+            if(SetMove)
+            { 
+                Move(MovementDirection);
+            }
+        }
+
+        //THIS SHOULD BE IN LOcAL PLATER ONLY CLASS
+        public void SetCharacterRotationBasedOffCamera()
+        {
+            //rotate character based upon the current camera position
+            CharacterController.transform.rotation =
+                Quaternion.Euler(CharacterController.transform.eulerAngles.x,
+                                    Camera.main.transform.eulerAngles.y,
+                                    CharacterController.transform.eulerAngles.z);
+        }
+
         public void Move(Vector3 moveVector)
         {
-            //check if grounded
-            if(characterController.isGrounded)
+            SetCharacterRotationBasedOffCamera(); 
+            if (characterController.isGrounded)
             {
-                //tell animator we're grounded
+                //rotate character based upon the current camera position
+                CharacterController.transform.rotation = Quaternion.Euler(CharacterController.transform.eulerAngles.x, Camera.main.transform.eulerAngles.y, CharacterController.transform.eulerAngles.z);
+
                 characterAnimator.SetBool("Falling", false);
                 handleGroundedMovement(moveVector);
             }
-            else
+            else if(!characterController.isGrounded)
             {
-                //characterAnimator.SetBool("Falling", true);
+                characterAnimator.SetBool("Falling", true);
                 handleAirborneMovement();
             }
         }
