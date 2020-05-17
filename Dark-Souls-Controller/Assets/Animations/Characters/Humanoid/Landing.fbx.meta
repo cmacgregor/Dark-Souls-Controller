@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 0af8864c7614051418c4a0d8cb6fee66
+guid: 57ea70e28179a574a991b5eaded7d32b
 ModelImporter:
   serializedVersion: 19300
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: HumanoidCharacter_CycleItemRight
+    second: HumanoidCharacterLanding
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -35,11 +35,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: HumanoidCharacter_CycleItemRight
+      name: HumanoidCharacterLanding
       takeName: mixamo.com
       internalID: 0
-      firstFrame: 0
-      lastFrame: 29
+      firstFrame: 10
+      lastFrame: 58
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -48,8 +48,8 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1

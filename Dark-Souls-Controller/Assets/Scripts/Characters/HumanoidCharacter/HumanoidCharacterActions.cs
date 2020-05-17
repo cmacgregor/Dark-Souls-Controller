@@ -35,6 +35,8 @@ namespace Characters.HumanoidCharacter
         public bool SetMove = false;
         public Vector3 MovementDirection;
 
+        public bool SetDodge = false;
+
         private bool sprinting = false;
         public float sprintSpeed = 4.0f;
         public float sprintSpeedMultiplier = 2.0f;
@@ -80,6 +82,7 @@ namespace Characters.HumanoidCharacter
             { 
                 Move(MovementDirection);
             }
+
         }
 
         //THIS SHOULD BE IN LOcAL PLATER ONLY CLASS

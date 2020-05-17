@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 0af8864c7614051418c4a0d8cb6fee66
+guid: 1d9a6d208509b60429db2dbf64c57c22
 ModelImporter:
   serializedVersion: 19300
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: HumanoidCharacter_CycleItemRight
+    second: HumanoidCharacterJump
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -35,11 +35,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: HumanoidCharacter_CycleItemRight
+      name: HumanoidCharacterJump
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
-      lastFrame: 29
+      lastFrame: 50
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
